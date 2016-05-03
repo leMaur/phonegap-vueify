@@ -1,0 +1,28 @@
+Usage: $0 local [command]
+
+DEPRECATED:
+
+  This command has been deprecated and will soon be removed entirely.
+
+  You should now use the `$0 local [command]` command.
+
+  See `$0 local help` to learn more about the command.
+
+Description:
+
+  Executes the command on the local system.
+
+  This requires that platform SDK is correctly installed.
+
+Commands:
+
+  build <platform>     build a specific platform
+  install <platform>   install a specific platform
+  run <platform>       build and install a specific platform
+  plugin <command>     add, remove, and list plugins
+
+Examples:
+
+  $ $0 local build android
+  $ $0 local run android
+  $ $0 local plugin list

@@ -1,0 +1,17 @@
+Usage: $0 template [command]
+
+Description:
+
+  Create a new project from an existing template and list the templates
+  available.
+
+Commands:
+
+  list      list recommended app templates
+  search    open npmjs.com to show all templates available
+
+Examples:
+
+  $ $0 template list
+  $ $0 template search
+  $ $0 create my-app --template hello-world

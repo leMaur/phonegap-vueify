@@ -1,0 +1,21 @@
+Usage: $0 plugin remove <id>
+Usage: $0 local plugin remove <id>
+
+DEPRECATED:
+
+  This command has been deprecated and will soon be removed entirely.
+
+  You should now use the `$0 plugin remove <id>` command.
+
+  See `$0 plugin remove help` to learn more about the command.
+
+Description:
+
+  Remove a plugin from your application.
+
+  <id> is the value of the "id" attribute in the plugin manifest.
+  <id> is also the directory name under /plugins/.
+
+Examples:
+
+  $ $0 local plugin remove org.apache.cordova.core.geolocation

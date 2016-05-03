@@ -1,0 +1,29 @@
+Usage: $0 run [<platforms>] [options] [-- [platform options]]
+
+Description:
+
+  Builds and installs your application for one or more specific platform.
+  When no platforms are specified, all installed platforms will be run.
+
+  Run is an all-in-one command that will prepare, compile, and install your
+  application to an emulator or device.
+
+Options:
+
+  --device             install to a device
+  --emulator, -e       install to an emulator
+  --target <id>        install to a specific target
+  --debug              build in debug mode (default)
+  --release            build in release mode
+  --nobuild            skips the build and only installs the app
+
+Experimental Options:
+
+  --browserify         plugin javascript is loaded into cordova.js
+
+Examples:
+
+  $ $0 run android
+  $ $0 run android ios
+  $ $0 run android --emulator
+  $ $0 run android --device --release

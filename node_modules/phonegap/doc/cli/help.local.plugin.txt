@@ -1,0 +1,28 @@
+Usage: $0 plugin <command>
+Usage: $0 local plugin <command>
+
+DEPRECATED:
+
+  This command has been deprecated and will soon be removed entirely.
+
+  You should now use the `$0 plugin <command>` command.
+
+  See `$0 plugin help` to learn more about the command.
+
+Description:
+
+  Add, remove, and list plugins for your application.
+
+Commands:
+
+  add <path>           add a plugin
+  remove <id>          remove a plugin
+  list                 list installed plugins
+
+Examples:
+
+  $ $0 local plugin add /local/path/to/plugin/
+  $ $0 plugin add /local/path/to/plugin/
+  $ $0 plugin add http://example.com/path/to/plugin.git
+  $ $0 plugin remove cordova-plugin-geolocation 
+  $ $0 plugin list

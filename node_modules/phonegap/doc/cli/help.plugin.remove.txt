@@ -1,0 +1,21 @@
+Usage: $0 plugin remove <id...> [options]
+Usage: $0 plugin rm     <id...> [options]
+
+Description:
+
+  Remove a plugin from your application.
+
+  <id> is the value of the "id" attribute in the plugin manifest.
+  <id> is also the directory name under /plugins/.
+
+  Multiple plugins can be removed by specifying multiple <id>'s.
+
+Options:
+
+    --save          removes the plugin information from config.xml if it was added using --save
+
+Examples:
+
+  $ $0 plugin remove cordova-plugin-geolocation
+  $ $0 plugin remove cordova-plugin-geolocation --save
+  $ $0 plugin remove cordova-plugin-geolocation cordova-plugin-device

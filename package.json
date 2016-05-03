@@ -1,0 +1,70 @@
+{
+  "name": "phonegap-vueify",
+  "version": "1.0.0",
+  "description": "PhoneGap template using Vue, Browserify, ES2015, hot reload, linting and unit testing.",
+  "Author": "Maurizio Lepora",
+  "license": "MIT",
+  "keywords": [
+    "ecosystem:phonegap",
+    "ecosystem:cordova"
+  ],
+  "scripts": {
+    "watchify": "watchify -vd -p browserify-hmr -e www/src/main.js -o www/dist/build.js",
+    "serve": "phonegap serve --port 8888",
+    "dev": "npm-run-all --parallel watchify serve",
+    "build": "cross-env NODE_ENV=production browserify -e www/src/main.js | uglifyjs -c warnings=false -m > www/dist/build.js & cordova build --release --device --browserify",
+    "lint": "eslint --ext .js,.vue www/src www/test/unit",
+    "test": "karma start karma.conf.js",
+    "prepare": "cordova platform add",
+    "ios": "cordova run ios",
+    "android": "cordova run android",
+    "compile": "browserify -e www/src/main.js -o www/dist/build.js & cordova compile --debug --target=",
+    "clean:platforms": "rimraf platforms/*",
+    "clean:dist": "rimraf www/dist/*",
+    "clean": "npm-run-all clean:platforms clean:dist"
+  },
+  "browserify": {
+    "transform": [
+      "vueify",
+      "babelify"
+    ]
+  },
+  "dependencies": {
+    "vue": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-plugin-transform-runtime": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-2": "^6.0.0",
+    "babel-runtime": "^5.8.0",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "browserify-hmr": "^0.3.1",
+    "cordova": "^6.1.1",
+    "cross-env": "^1.0.5",
+    "eslint": "^1.10.3",
+    "eslint-plugin-html": "^1.1.0",
+    "http-server": "^0.9.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.15",
+    "karma-browserify": "^4.4.2",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-spec-reporter": "0.0.23",
+    "less": "^2.6.1",
+    "npm-run-all": "^1.6.0",
+    "phantomjs-prebuilt": "^2.1.3",
+    "phonegap": "^6.2.1",
+    "proxyquireify": "^3.0.1",
+    "rimraf": "^2.5.2",
+    "stylus": "^0.54.5",
+    "uglify-js": "^2.5.0",
+    "vue-hot-reload-api": "^1.2.2",
+    "vue-resource": "^0.7.0",
+    "vueify": "^8.0.0",
+    "vueify-insert-css": "^1.0.0",
+    "vuex": "^0.6.3",
+    "watchify": "^3.4.0"
+  }
+}
