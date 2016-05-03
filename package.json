@@ -6,7 +6,9 @@
   "license": "MIT",
   "keywords": [
     "ecosystem:phonegap",
-    "ecosystem:cordova"
+    "ecosystem:cordova",
+    "vue.js", "browserify", "vueify",
+    "hot-reload"
   ],
   "scripts": {
     "watchify": "watchify -vd -p browserify-hmr -e www/src/main.js -o www/dist/build.js",
