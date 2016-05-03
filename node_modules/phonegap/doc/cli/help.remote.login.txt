@@ -1,0 +1,21 @@
+Usage: $0 remote login [options]
+
+Description:
+
+  Log into your PhoneGap/Build account.
+
+Options:
+
+  -u, --username       your username (email address)
+  -p, --password       your password
+  --protocol           server protocol (default: 'https:')
+  --host               server host (default: 'build.phonegap.com')
+  --port               server port (default: '443')
+  --path               server path prefix (default: '/api/v1')
+  --proxy              proxy server to route requests
+
+Examples:
+
+  $ $0 remote login
+  $ $0 remote login --username michael@michaelbrooks.ca
+  $ $0 remote login --u michael@michaelbrooks.ca

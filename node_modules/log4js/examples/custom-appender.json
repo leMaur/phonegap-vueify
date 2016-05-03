@@ -1,0 +1,5 @@
+{
+  "appenders": [
+    { "type": "../examples/custom", "cheese": "gouda"}
+  ]
+}

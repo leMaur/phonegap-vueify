@@ -1,0 +1,27 @@
+Usage: $0 install [<platforms>] [options] [-- [platform options]]
+
+DEPRECATED:
+
+  This command has been deprecated and will soon be removed entirely.
+
+  You should now use the `$0 run <platform>` command.
+
+  See `$0 run help` to learn more about the command.
+
+Description:
+
+  Installs the application for one or more specific platform. When no
+  platform is specified, all platforms will be installed to target
+  emulators or devices.
+
+  Default action installs to a connected device, otherwise uses an emulator.
+
+Options:
+
+  --device             only install to a device
+  --emulator, -e       only install to an emulator
+
+Examples:
+
+  $ $0 local install android
+  $ $0 local install android --device

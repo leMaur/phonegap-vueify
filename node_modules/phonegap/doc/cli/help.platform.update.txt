@@ -1,0 +1,13 @@
+Usage: $0 platform update <platform> [options]
+
+Description:
+
+  Updates a specified platform to the version bundled with this CLI.
+
+Examples:
+
+  $ $0 platform update ios
+
+Also See:
+
+  $ $0 help platform check
