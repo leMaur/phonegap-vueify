@@ -32,7 +32,9 @@
     ]
   },
   "dependencies": {
-    "vue": "^1.0.0"
+    "vue": "^1.0.0",
+    "vuex": "^0.6.3",
+    "vue-resource": "^0.7.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -63,10 +65,8 @@
     "stylus": "^0.54.5",
     "uglify-js": "^2.5.0",
     "vue-hot-reload-api": "^1.2.2",
-    "vue-resource": "^0.7.0",
     "vueify": "^8.0.0",
     "vueify-insert-css": "^1.0.0",
-    "vuex": "^0.6.3",
     "watchify": "^3.4.0"
   }
 }
