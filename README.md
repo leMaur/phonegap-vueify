@@ -1,12 +1,15 @@
-# PhoneGap Vueify
+PhoneGap Vueify
+===============
 PhoneGap with Vue, Browserify + vueify, hot reload, linting and unit testing.
 
-## Getting Started
+Getting Started
+---------------
 
 ### Prerequisites
 To use this you'll need Node.js v4 or newer.
 
 ### Installation
+***via Github***
 ``` bash
 $ git clone https://github.com/leMaur/phonegap-vueify.git MyApp
 $ cd MyApp
@@ -15,6 +18,11 @@ $ npm run dev
 ```
 You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 Please, change `MyApp`with your folder name.
+
+***via Npm***
+```bash
+$ npm install phonegap-vueify
+```
 
 ### What's included
 - `npm run dev`: Browserify + `vueify` with proper config for source map & hot-reload.
