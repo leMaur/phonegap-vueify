@@ -19,13 +19,20 @@ $ npm run dev
 
 ***via Phonegap***
 ```bash
-$ mkdir MyApp
-$ cd MyApp
 $ npm install -g phonegap
-$ phonegap create --template phonegap-vueify
+$ phonegap create MyApp --template phonegap-vueify
+$ cd MyApp
 $ npm run dev
 ```
-Please, change `MyApp` with your folder name. 
+
+***via Cordova***
+```bash
+$ npm install -g cordova
+$ cordova create MyApp --template=phonegap-vueify
+$ cd MyApp
+$ npm run dev
+```
+Please, change `MyApp` with your folder name.  
 You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 
 ### What's included
