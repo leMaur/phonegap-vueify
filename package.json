@@ -1,6 +1,6 @@
 {
   "name": "phonegap-vueify",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "PhoneGap template using Vue, Browserify, ES2015, hot reload, linting and unit testing.",
   "author": {
     "name": "Maurizio Lepora",
