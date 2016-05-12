@@ -25,7 +25,7 @@ $ npm install -g phonegap
 $ phonegap create --template phonegap-vueify
 $ npm run dev
 ```
-Please, change `MyApp`with your folder name.
+Please, change `MyApp` with your folder name. 
 You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 
 ### What's included
