@@ -19,11 +19,21 @@
   "keywords": [
     "ecosystem:phonegap",
     "ecosystem:cordova",
+    "cordova:template",
+    "phonegap:template",
     "vue.js",
     "browserify",
     "vueify",
     "hot-reload"
   ],
+  "cordova": {
+    "id": "phonegap-vueify",
+    "platforms": [
+      "android",
+      "ios",
+      "browser"
+    ]
+  },
   "scripts": {
     "watchify": "watchify -vd -p browserify-hmr -e www/src/main.js -o www/dist/build.js",
     "serve": "phonegap serve --port 8888",
