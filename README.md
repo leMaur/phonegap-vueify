@@ -16,13 +16,15 @@ $ cd MyApp
 $ npm install
 $ npm run dev
 ```
-You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 Please, change `MyApp`with your folder name.
 
-***via Npm***
+***via Phonegap***
 ```bash
-$ npm install phonegap-vueify
+$ npm install -g phonegap
+$ phonegap create --template phonegap-vueify
+$ npm run dev
 ```
+You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 
 ### What's included
 - `npm run dev`: Browserify + `vueify` with proper config for source map & hot-reload.
