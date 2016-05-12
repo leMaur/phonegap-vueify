@@ -9,7 +9,9 @@ describe('Hello.vue', () => {
       template: '<div><hello></hello></div>',
       components: { Hello }
     }).$mount()
-    expect(vm.$el.querySelector('.hello h1').textContent).toBe('Hello World!')
+    expect(vm.$el.querySelector('.Hello .Lead.Lead-phonegap').textContent).toBe('Phonegap')
+    expect(vm.$el.querySelector('.Hello .Lead.Lead-spacer').textContent).toBe('meets')
+    expect(vm.$el.querySelector('.Hello .Lead.Lead-vue').textContent).toBe('Vue.js')
   })
 })
 
