@@ -6,7 +6,7 @@ Getting Started
 ---------------
 
 ### Prerequisites
-To use this you'll need Node.js v4 or newer.
+To use this you'll need Node.js v5 or newer.
 
 ### Installation
 ***via Github***
@@ -16,14 +16,16 @@ $ cd MyApp
 $ npm install
 $ npm run dev
 ```
-Please, change `MyApp`with your folder name.
 
 ***via Phonegap***
 ```bash
+$ mkdir MyApp
+$ cd MyApp
 $ npm install -g phonegap
 $ phonegap create --template phonegap-vueify
 $ npm run dev
 ```
+Please, change `MyApp`with your folder name.
 You can then open the app in your browser by visiting [localhost:8888](http://localhost:8888)  
 
 ### What's included
