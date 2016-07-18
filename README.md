@@ -22,6 +22,7 @@ $ npm run dev
 $ npm install -g phonegap
 $ phonegap create MyApp --template phonegap-vueify
 $ cd MyApp
+$ npm install
 $ npm run dev
 ```
 
@@ -30,6 +31,7 @@ $ npm run dev
 $ npm install -g cordova
 $ cordova create MyApp --template=phonegap-vueify
 $ cd MyApp
+$ npm install
 $ npm run dev
 ```
 Please, change `MyApp` with your folder name.  
