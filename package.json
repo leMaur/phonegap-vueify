@@ -38,7 +38,7 @@
     "watchify": "watchify -vd -p browserify-hmr -e www/src/main.js -o www/dist/build.js",
     "serve": "phonegap serve --port 8888",
     "dev": "npm-run-all --parallel watchify serve",
-    "build": "cross-env NODE_ENV=production browserify -e www/src/main.js | uglifyjs -c warnings=false -m > www/dist/build.js & cordova build --release --device --browserify",
+    "build": "cross-env NODE_ENV=production browserify -e www/src/main.js | uglifyjs -c warnings=false -m > www/dist/build.js & cordova build --release --device --target=",
     "lint": "eslint --ext .js,.vue www/src www/test/unit",
     "test": "karma start karma.conf.js",
     "prepare": "cordova platform add",
