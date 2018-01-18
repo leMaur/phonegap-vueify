@@ -19,11 +19,13 @@
  *
 */
 
-oxide.addMessageHandler("EXECUTE", function(msg) {
+/* global oxide */
+
+oxide.addMessageHandler('EXECUTE', function (msg) {
     var code = msg.args.code;
     try {
-        msg.reply({result: eval(code)});
-    } catch(e) {
-        msg.error("Code threw exception: \"" + e + "\"");
+        msg.reply({result: eval(code)}); // eslint-disable-line no-eval
+    } catch (e) {
+        msg.error('Code threw exception: "' + e + '"');
     }
 });

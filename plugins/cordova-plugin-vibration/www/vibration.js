@@ -50,36 +50,31 @@ module.exports = {
      *                                      off or to turn the vibrator on.
      *                                      (if empty, cancels vibration)
      */
-    vibrate: function(param) {
-
+    vibrate: function (param) {
         /* Aligning with w3c spec */
-        
-        //vibrate
-        if ((typeof param == 'number') && param !== 0)
-            exec(null, null, "Vibration", "vibrate", [param]);
 
-        //vibrate with array ( i.e. vibrate([3000]) )
-        else if ((typeof param == 'object') && param.length == 1)
-        {
-            //cancel if vibrate([0])
-            if (param[0] === 0)
-                exec(null, null, "Vibration", "cancelVibration", []);
+        // vibrate
+        if ((typeof param === 'number') && param !== 0) {
+            exec(null, null, 'Vibration', 'vibrate', [param]);
 
-            //else vibrate
-            else
-                exec(null, null, "Vibration", "vibrate", [param[0]]);
-        }
+        // vibrate with array ( i.e. vibrate([3000]) )
+        } else if ((typeof param === 'object') && param.length === 1) {
+            // cancel if vibrate([0])
+            if (param[0] === 0) {
+                exec(null, null, 'Vibration', 'cancelVibration', []);
 
-        //vibrate with a pattern
-        else if ((typeof param == 'object') && param.length > 1)
-        {
-            var repeat = -1; //no repeat
-            exec(null, null, "Vibration", "vibrateWithPattern", [param, repeat]);
-        }
+            // else vibrate
+            } else {
+                exec(null, null, 'Vibration', 'vibrate', [param[0]]);
+            }
 
-        //cancel vibration (param = 0 or [])
-        else
-            exec(null, null, "Vibration", "cancelVibration", []);
+        // vibrate with a pattern
+        } else if ((typeof param === 'object') && param.length > 1) {
+            var repeat = -1; // no repeat
+            exec(null, null, 'Vibration', 'vibrateWithPattern', [param, repeat]);
+
+        // cancel vibration (param = 0 or [])
+        } else { exec(null, null, 'Vibration', 'cancelVibration', []); }
 
         return true;
     },
@@ -106,16 +101,16 @@ module.exports = {
      *                                      to start repeating (will repeat until canceled),
      *                                      or -1 for no repetition (default).
      */
-    vibrateWithPattern: function(pattern, repeat) {
-        repeat = (typeof repeat !== "undefined") ? repeat : -1;
-        pattern.unshift(0); //add a 0 at beginning for backwards compatibility from w3c spec
-        exec(null, null, "Vibration", "vibrateWithPattern", [pattern, repeat]);
+    vibrateWithPattern: function (pattern, repeat) {
+        repeat = (typeof repeat !== 'undefined') ? repeat : -1;
+        pattern = pattern.unshift(0); // add a 0 at beginning for backwards compatibility from w3c spec
+        exec(null, null, 'Vibration', 'vibrateWithPattern', [pattern, repeat]);
     },
 
     /**
      * Immediately cancels any currently running vibration.
      */
-    cancelVibration: function() {
-        exec(null, null, "Vibration", "cancelVibration", []);
+    cancelVibration: function () {
+        exec(null, null, 'Vibration', 'cancelVibration', []);
     }
 };

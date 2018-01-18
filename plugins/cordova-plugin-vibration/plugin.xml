@@ -21,7 +21,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-vibration"
-    version="2.1.1">
+    version="2.1.6">
 
     <name>Vibration</name>
     <description>Cordova Vibration Plugin</description>
@@ -41,7 +41,7 @@
             <feature name="Vibration">
                 <param name="firefoxos-package" value="Vibration" />
             </feature>
-        </config-file>                                         
+        </config-file>
         <js-module src="src/firefoxos/VibrationProxy.js" name="VibrationProxy">
             <runs />
         </js-module>
@@ -108,7 +108,7 @@
             <uses-permission android:name="android.permission.VIBRATE"/>
         </config-file>
     </platform>
-    
+
     <!-- ubuntu -->
     <platform name="ubuntu">
         <header-file src="src/ubuntu/vibration.h" />
@@ -127,7 +127,7 @@
 
 		<framework src="AudioToolbox.framework" weak="true" />
     </platform>
-	
+
     <!-- blackberry10 -->
     <platform name="blackberry10">
         <source-file src="src/blackberry10/index.js" target-dir="Vibration"/>

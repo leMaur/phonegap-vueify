@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
       id="cordova-plugin-battery-status"
-      version="1.1.2">
+      version="1.2.5">
     <name>Battery</name>
     <description>Cordova Battery Plugin</description>
     <license>Apache 2.0</license>
@@ -31,7 +31,7 @@
     <js-module src="www/battery.js" name="battery">
         <clobbers target="navigator.battery" />
     </js-module>
-    
+
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -53,7 +53,7 @@
 
         <source-file src="src/android/BatteryListener.java" target-dir="src/org/apache/cordova/batterystatus" />
     </platform>
-    
+
     <!-- ubuntu -->
     <platform name="ubuntu">
         <header-file src="src/ubuntu/battery.h" />
@@ -61,10 +61,10 @@
     </platform>
 
     <!-- ios -->
-    <platform name="ios">    
+    <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="Battery">
-                <param name="ios-package" value="CDVBattery" /> 
+                <param name="ios-package" value="CDVBattery" />
             </feature>
         </config-file>
         <header-file src="src/ios/CDVBattery.h" />
@@ -102,11 +102,11 @@
     </platform>
 
     <!-- windows -->
-    <platform name="windows">	
+    <platform name="windows">
         <js-module src="src/windows/BatteryProxy.js" name="Battery">
             <runs />
         </js-module>
-        
+
         <framework src="src/windows/BatteryStatus.winmd" custom="true" target="phone"/>
     </platform>
 
@@ -123,7 +123,7 @@
             <runs />
         </js-module>
     </platform>
-	
+
     <!-- browser -->
     <platform name="browser">
         <js-module src="src/browser/BatteryProxy.js" name="Battery">

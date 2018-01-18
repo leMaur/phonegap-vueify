@@ -18,11 +18,50 @@
 # under the License.
 #
 -->
+
 # Release Notes
 
+### 1.2.5 (Nov 06, 2017)
+* [CB-13299](https://issues.apache.org/jira/browse/CB-13299) (CI) Fix **Android** builds
+* [CB-12895](https://issues.apache.org/jira/browse/CB-12895) added `eslint` and removed `jshint`
+* [CB-13028](https://issues.apache.org/jira/browse/CB-13028) (CI) Added **Browser** platform to Travis
+* [CB-13000](https://issues.apache.org/jira/browse/CB-13000) (CI) Speed up **Android** builds
+* [CB-12991](https://issues.apache.org/jira/browse/CB-12991) (CI) Updated CI badges
+* [CB-12847](https://issues.apache.org/jira/browse/CB-12847) added `bugs` entry to `package.json`.
+
+### 1.2.4 (Apr 27, 2017)
+* [CB-12622](https://issues.apache.org/jira/browse/CB-12622) (Android) Added **Android 6.0** build badge
+* [CB-12685](https://issues.apache.org/jira/browse/CB-12685) added `package.json` to tests folder
+* [CB-12639](https://issues.apache.org/jira/browse/CB-12639) (all) Tests: console.err() -> console.error()
+
+### 1.2.3 (Feb 28, 2017)
+* [CB-12369](https://issues.apache.org/jira/browse/CB-12369) Add plugin typings from `DefinitelyTyped`
+* [CB-12363](https://issues.apache.org/jira/browse/CB-12363) Added build badges for **iOS 9.3** and **iOS 10.0**
+
+### 1.2.2 (Dec 12, 2016)
+* [CB-12227](https://issues.apache.org/jira/browse/CB-12227) (windows) Fixed Browserify error
+* [CB-12236](https://issues.apache.org/jira/browse/CB-12236) - Fix RELEASENOTES.md for cordova-plugin-battery-status
+* [CB-12230](https://issues.apache.org/jira/browse/CB-12230) Removed Windows 8.1 build badges
+* [CB-12224](https://issues.apache.org/jira/browse/CB-12224) Incremented plugin version.
+
+### 1.2.1 (Dec 07, 2016)
+
+* [CB-12224](https://issues.apache.org/jira/browse/CB-12224) Updated version and RELEASENOTES.md for release 1.2.1
+* [CB-8929](https://issues.apache.org/jira/browse/CB-8929) Fix failing tests on iOS
+* [CB-8929](https://issues.apache.org/jira/browse/CB-8929) Use PowerManager to get battery state on Win 10
+* [CB-11917](https://issues.apache.org/jira/browse/CB-11917) - Remove pull request template checklist item: "iCLA has been submitted…"
+* [CB-11832](https://issues.apache.org/jira/browse/CB-11832) Incremented plugin version.
+
+### 1.2.0 (Sep 08, 2016)
+* [CB-11795](https://issues.apache.org/jira/browse/CB-11795) Add 'protective' entry to cordovaDependencies
+* Plugin uses Android Log class and not Cordova LOG class
+* Add badges for paramedic builds on Jenkins
+* Add pull request template.
+* [CB-10996](https://issues.apache.org/jira/browse/CB-10996) Adding front matter to README.md
+
 ### 1.1.2 (Apr 15, 2016)
-* CB-10720 Reorganizing and rewording docs.
-* CB-10636 Add JSHint for plugins
+* [CB-10720](https://issues.apache.org/jira/browse/CB-10720) Reorganizing and rewording docs.
+* [CB-10636](https://issues.apache.org/jira/browse/CB-10636) Add JSHint for plugins
 
 ### 1.1.1 (Nov 18, 2015)
 * [CB-10035](https://issues.apache.org/jira/browse/CB-10035) Updated `RELEASENOTES` to be newest to oldest

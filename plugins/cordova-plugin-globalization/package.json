@@ -1,7 +1,34 @@
 {
-  "name": "cordova-plugin-globalization",
-  "version": "1.0.3",
-  "description": "Cordova Globalization Plugin",
+  "_from": "cordova-plugin-globalization@~1.0.7",
+  "_id": "cordova-plugin-globalization@1.0.9",
+  "_inBundle": false,
+  "_integrity": "sha1-RluZmP7qC4iIRNCc19oCv6Jst6M=",
+  "_location": "/cordova-plugin-globalization",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-globalization@~1.0.7",
+    "name": "cordova-plugin-globalization",
+    "escapedName": "cordova-plugin-globalization",
+    "rawSpec": "~1.0.7",
+    "saveSpec": null,
+    "fetchSpec": "~1.0.7"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-globalization/-/cordova-plugin-globalization-1.0.9.tgz",
+  "_shasum": "465b9998feea0b888844d09cd7da02bfa26cb7a3",
+  "_spec": "cordova-plugin-globalization@~1.0.7",
+  "_where": "/Users/janthoma/Desktop/bwfy",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-globalization",
     "platforms": [
@@ -17,10 +44,25 @@
       "blackberry10"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-globalization"
+  "deprecated": false,
+  "description": "Cordova Globalization Plugin",
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-globalization#readme",
   "keywords": [
     "cordova",
     "globalization",
@@ -36,13 +78,16 @@
     "cordova-tizen",
     "cordova-blackberry10"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "jshint www && jshint src && jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "name": "cordova-plugin-globalization",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-globalization.git"
+  },
+  "scripts": {
+    "eslint": "eslint www && eslint src && eslint tests",
+    "test": "npm run eslint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.0.9"
 }

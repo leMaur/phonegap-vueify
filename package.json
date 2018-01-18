@@ -1,96 +1,77 @@
 {
-  "name": "phonegap-vueify",
-  "version": "1.0.7",
-  "description": "PhoneGap template using Vue, Browserify, ES2015, hot reload, linting and unit testing.",
-  "author": {
-    "name": "Maurizio Lepora",
-    "email": "maurizio.lepora@gmail.com",
-    "url": "https://github.com/lemaur/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lemaur/phonegap-vueify.git"
-  },
-  "bugs": {
-    "url": "https://github.com/lemaur/phonegap-vueify/issues"
-  },
-  "homepage": "https://github.com/lemaur/phonegap-vueify#readme",
-  "license": "MIT",
-  "keywords": [
-    "ecosystem:phonegap",
-    "ecosystem:cordova",
-    "cordova:template",
-    "phonegap:template",
-    "vue.js",
-    "browserify",
-    "vueify",
-    "hot-reload"
-  ],
-  "cordova": {
-    "id": "phonegap-vueify",
-    "platforms": [
-      "android",
-      "ios",
-      "browser"
-    ]
-  },
+  "name": "bwfy",
+  "version": "0.1.0",
+  "description": "A Vue.js project",
+  "author": "Jan Thoma <jan.thoma@t-k-f.ch>",
+  "private": true,
   "scripts": {
     "watchify": "watchify -vd -p browserify-hmr -e www/src/main.js -o www/dist/build.js",
     "serve": "phonegap serve --port 8888",
     "dev": "npm-run-all --parallel watchify serve",
-    "build": "cross-env NODE_ENV=production browserify -e www/src/main.js | uglifyjs -c warnings=false -m > www/dist/build.js & cordova build --release --device --target=",
-    "lint": "eslint --ext .js,.vue www/src www/test/unit",
-    "test": "karma start karma.conf.js",
-    "prepare": "cordova platform add",
-    "ios": "cordova run ios",
-    "android": "cordova run android",
-    "compile": "browserify -e www/src/main.js -o www/dist/build.js & cordova compile --debug --target=",
-    "clean:platforms": "rimraf platforms/*",
-    "clean:dist": "rimraf www/dist/*",
-    "clean": "npm-run-all clean:platforms clean:dist"
+    "lint": "eslint --ext .js,.vue src",
+    "build": "cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o dist/build.css ] -e src/main.js | uglifyjs -c warnings=false -m > dist/build.js"
   },
   "browserify": {
     "transform": [
-      "vueify",
-      "babelify"
+      "babelify",
+      "vueify"
     ]
   },
-  "engine": "node >= 5.0.0",
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
+  },
   "dependencies": {
-    "phonegap": "^6.2.1",
-    "vue": "^1.0.0",
-    "vuex": "^0.6.3",
-    "vue-resource": "^0.7.0"
+    "cordova-plugin-battery-status": "~1.2.4",
+    "cordova-plugin-camera": "~2.4.1",
+    "cordova-plugin-device": "~1.1.6",
+    "cordova-plugin-dialogs": "~1.3.3",
+    "cordova-plugin-file": "~4.3.3",
+    "cordova-plugin-geolocation": "~2.4.3",
+    "cordova-plugin-globalization": "~1.0.7",
+    "cordova-plugin-inappbrowser": "~1.7.1",
+    "cordova-plugin-media-capture": "~1.4.3",
+    "cordova-plugin-network-information": "~1.3.3",
+    "cordova-plugin-vibration": "~2.1.5",
+    "vue": "^2.0.1",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-stage-2": "^6.0.0",
-    "babel-runtime": "^5.8.0",
+    "babel-runtime": "^6.0.0",
     "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
+    "browserify": "^13.1.0",
     "browserify-hmr": "^0.3.1",
-    "cordova": "^6.1.1",
-    "cross-env": "^1.0.5",
-    "eslint": "^1.10.3",
-    "eslint-plugin-html": "^1.1.0",
+    "cross-env": "^2.0.0",
+    "envify": "^3.4.1",
+    "eslint": "^3.3.0",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-html": "^1.5.2",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0",
     "http-server": "^0.9.0",
-    "jasmine-core": "^2.4.1",
-    "karma": "^0.13.15",
-    "karma-browserify": "^4.4.2",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^1.0.0",
-    "karma-spec-reporter": "0.0.23",
-    "npm-run-all": "^1.6.0",
-    "phantomjs-prebuilt": "^2.1.3",
+    "npm-run-all": "^2.3.0",
     "proxyquireify": "^3.0.1",
-    "rimraf": "^2.5.2",
-    "stylus": "^0.54.5",
     "uglify-js": "^2.5.0",
-    "vue-hot-reload-api": "^1.2.2",
-    "vueify": "^8.0.0",
-    "vueify-insert-css": "^1.0.0",
+    "vueify": "^9.0.0",
     "watchify": "^3.4.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-battery-status": {},
+      "cordova-plugin-camera": {},
+      "cordova-plugin-media-capture": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-globalization": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-vibration": {}
+    }
   }
 }

@@ -21,7 +21,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-file"
-      version="4.2.0">
+      version="4.3.3">
     <name>File</name>
     <description>Cordova File Plugin</description>
     <license>Apache 2.0</license>
@@ -109,8 +109,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <runs />
     </js-module>
 
-    <info>
-The Android Persistent storage location now defaults to "Internal". Please check this plugins README to see if you application needs any changes in its config.xml.
+    <!-- android -->
+    <platform name="android">
+        <info>
+The Android Persistent storage location now defaults to "Internal". Please check this plugin's README to see if your application needs any changes in its config.xml.
 
 If this is a new application no changes are required.
 
@@ -119,16 +121,13 @@ If this is an update to an existing application that did not specify an "Android
       "&lt;preference name="AndroidPersistentFileLocation" value="Compatibility" /&gt;"
 
 to config.xml in order for the application to find previously stored files.
-
-    </info>
-
-    <!-- android -->
-    <platform name="android">
+        </info>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="File" >
                 <param name="android-package" value="org.apache.cordova.file.FileUtils"/>
                 <param name="onload" value="true" />
             </feature>
+            <allow-navigation href="cdvfile:*" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -364,7 +363,7 @@ to config.xml in order for the application to find previously stored files.
     <!-- windows8 -->
     <platform name="windows8">
         <js-module src="src/windows/FileProxy.js" name="FileProxy">
-            <merges target="" />
+            <runs />
         </js-module>
 
         <js-module src="www/fileSystemPaths.js" name="fileSystemPaths">
@@ -376,7 +375,7 @@ to config.xml in order for the application to find previously stored files.
     <!-- windows -->
     <platform name="windows">
         <js-module src="src/windows/FileProxy.js" name="FileProxy">
-            <merges target="" />
+            <runs />
         </js-module>
 
         <js-module src="www/fileSystemPaths.js" name="fileSystemPaths">

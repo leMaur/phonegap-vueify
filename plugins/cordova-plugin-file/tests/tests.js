@@ -368,6 +368,20 @@ exports.defineAutoTests = function () {
                     }
                     createDirectory(fileName, gotDirectory, failed.bind(null, done, 'createDirectory - Error creating directory: ' + fileName), failed.bind(null, done, 'createDirectory - Error creating directory: ' + fileName));
                 });
+
+                it("file.spec.9.7 should resolve a file with valid nativeURL", function (done) {
+                    var fileName = "de.create.file",
+                    win = function (entry) {
+                        var path = entry.nativeURL.split('///')[1];
+                        expect(/\/{2,}/.test(path)).toBeFalsy();
+                        // cleanup
+                        deleteEntry(entry.name, done);
+                    };
+                    root.getFile(fileName, {
+                        create: true
+                    }, win, succeed.bind(null, done, 'root.getFile - Error unexpected callback, file should not exists: ' + fileName));
+                });
+
                 it("file.spec.10 resolve valid file name with parameters", function (done) {
                     var fileName = "resolve.file.uri.params",
                     win = function (fileEntry) {
@@ -1744,6 +1758,37 @@ exports.defineAutoTests = function () {
                     }, failed.bind(null, done, 'createDirectory - Error creating directory : ' + srcDir));
                 }, failed.bind(null, done, 'deleteEntry - Error removing directory : ' + dstDir));
             });
+
+            it("file.spec.131 moveTo: directories tree to new parent", function (done) {
+                if (isIndexedDBShim) {
+                    /* `copyTo` and `moveTo` functions do not support directories (Firefox, IE) */
+                    pending();
+                }
+
+                var srcDir = "entry.move.dnp.srcDir";
+                var srcDirNestedFirst = "entry.move.dnp.srcDir.Nested1";
+                var srcDirNestedSecond = "entry.move.dnp.srcDir.Nested2";
+                var dstDir = "entry.move.dnp.dstDir";
+
+                createDirectory(dstDir, function (dstDirectory) {
+                    createDirectory(srcDir, function (srcDirectory) {
+                        srcDirectory.getDirectory(srcDirNestedFirst, { create: true }, function () {
+                            srcDirectory.getDirectory(srcDirNestedSecond, { create: true }, function () {
+                                srcDirectory.moveTo(dstDirectory, srcDir, function successMove(transferredDirectory) {
+                                    var directoryReader = transferredDirectory.createReader();
+                                    directoryReader.readEntries(function successRead(entries) {
+                                        expect(entries.length).toBe(2);
+                                        expect(entries[0].name).toBe(srcDirNestedFirst);
+                                        expect(entries[1].name).toBe(srcDirNestedSecond);
+                                        deleteEntry(dstDir, done);
+                                    }, failed.bind(null, done, 'Error getting entries from: ' + transferredDirectory));
+                                }, failed.bind(null, done, 'directory.moveTo - Error moving directory : ' + srcDir + ' to root as: ' + dstDir));
+                            }, failed.bind(null, done, 'directory.getDirectory - Error creating directory : ' + srcDirNestedSecond));
+                        }, failed.bind(null, done, 'directory.getDirectory - Error creating directory : ' + srcDirNestedFirst));
+                    }, failed.bind(null, done, 'createDirectory - Error creating source directory : ' + srcDir));
+                }, failed.bind(null, done, 'createDirectory - Error creating dest directory : ' + dstDir));
+            });
+
             it("file.spec.70 moveTo: directory onto itself", function (done) {
                 if (isIndexedDBShim) {
                     /* `copyTo` and `moveTo` functions do not support directories (Firefox, IE) */
@@ -2469,7 +2514,41 @@ exports.defineAutoTests = function () {
                     },
                     0, -1, largeText);
             });
-       });
+            it("file.spec.94.6 should read large file in multiple chunks, readAsDataURL", function (done) {
+                var largeText = "";
+                for (var i = 0; i < 10; i++) {
+                    largeText += "Test " + i + "\n";
+                }
+
+                // Set the chunk size so that the read will take 5 chunks
+                FileReader.READ_CHUNK_SIZE = Math.floor(largeText.length / 4) + 1;
+
+                var lastProgressValue = 0;
+                var progressFunc = function (evt) {
+                    expect(evt.total).toBeDefined();
+                    expect(evt.total).toEqual(largeText.length);
+
+                    expect(evt.loaded).toBeDefined();
+                    expect(evt.loaded).toBeGreaterThan(lastProgressValue);
+                    expect(evt.loaded).toBeLessThan(evt.total + 1);
+
+                    lastProgressValue = evt.loaded;
+                };
+
+                runReaderTest('readAsDataURL', false, done, progressFunc,
+                    function (evt, fileData, fileDataAsBinaryString) {
+                        expect(function () {
+                            // Cut off data uri prefix
+                            var base64Data = evt.target.result.substring(evt.target.result.indexOf(',') + 1);
+                            expect(window.atob(base64Data)).toEqual(fileData);
+                        }).not.toThrow();
+
+                        expect(lastProgressValue).toEqual(largeText.length);
+                        done();
+                    },
+                undefined, undefined, largeText);
+            });
+        });
         //Read method
         describe('FileWriter', function () {
             it("file.spec.95 should have correct methods", function (done) {
@@ -3441,6 +3520,46 @@ exports.defineAutoTests = function () {
                 }
             });
         });
+        describe('resolveLocalFileSystemURL on cdvfile://', function () {
+            it("file.spec.147 should be able to resolve cdvfile applicationDirectory fs root", function(done) {
+                var cdvfileApplicationDirectoryFsRootName;
+                if (cordova.platformId === 'android') {
+                    cdvfileApplicationDirectoryFsRootName = 'assets';
+                } else if (cordova.platformId === 'ios') {
+                    cdvfileApplicationDirectoryFsRootName = 'bundle';
+                } else {
+                    pending();
+                }
+
+                resolveLocalFileSystemURL('cdvfile://localhost/' + cdvfileApplicationDirectoryFsRootName + '/', function(applicationDirectoryRoot) {
+                    expect(applicationDirectoryRoot.isFile).toBe(false);
+                    expect(applicationDirectoryRoot.isDirectory).toBe(true);
+                    expect(applicationDirectoryRoot.name).toCanonicallyMatch('');
+                    expect(applicationDirectoryRoot.fullPath).toCanonicallyMatch('/');
+                    expect(applicationDirectoryRoot.filesystem.name).toEqual(cdvfileApplicationDirectoryFsRootName);
+
+                    // Requires HelloCordova www assets, <allow-navigation href="cdvfile:*" /> in config.xml or
+                    // cdvfile: in CSP and <access origin="cdvfile://*" /> in config.xml
+                    resolveLocalFileSystemURL('cdvfile://localhost/' + cdvfileApplicationDirectoryFsRootName + '/www/img/logo.png', function(entry) {
+                        expect(entry.isFile).toBe(true);
+                        expect(entry.isDirectory).toBe(false);
+                        expect(entry.name).toCanonicallyMatch('logo.png');
+                        expect(entry.fullPath).toCanonicallyMatch('/www/img/logo.png');
+                        expect(entry.filesystem.name).toEqual(cdvfileApplicationDirectoryFsRootName);
+
+                        var img = new Image();
+                        img.onerror = function(err) {
+                            expect(err).not.toBeDefined();
+                            done();
+                        };
+                        img.onload = function() {
+                            done();
+                        };
+                        img.src = entry.toInternalURL();
+                    }, failed.bind(null, done, 'resolveLocalFileSystemURL failed for cdvfile applicationDirectory'));
+                }, failed.bind(null, done, 'resolveLocalFileSystemURL failed for cdvfile applicationDirectory'));
+            });
+        });
         //cross-file-system copy and move
         describe('IndexedDB-based impl', function () {
             it("file.spec.131 Nested file or nested directory should be removed when removing a parent directory", function (done) {
@@ -3576,6 +3695,7 @@ exports.defineAutoTests = function () {
         // Content and Asset URLs
         if (cordova.platformId == 'android') {
             describe('content: URLs', function() {
+                // Warning: Default HelloWorld www directory structure is required for these tests (www/index.html at least)
                 function testContentCopy(src, done) {
                     var file2 = "entry.copy.file2b",
                     fullPath = joinURL(temp_root.fullPath, file2),
@@ -3762,6 +3882,37 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         }, logError("requestFileSystem"));
     }
 
+    function resolveFsContactImage() {
+        navigator.contacts.pickContact(function(contact) {
+            var logBox = document.getElementById("logContactBox");
+            logBox.innerHTML = "";
+            var resolveResult = document.createElement("p");
+            if (contact.photos) {
+                var photoURL = contact.photos[0].value;
+                resolveLocalFileSystemURL(photoURL, function(entry) {
+                    var contactImage = document.createElement("img");
+                    var contactLabelImage = document.createElement("p");                       
+                    contactLabelImage.innerHTML = "Result contact image";                   
+                    contactImage.setAttribute("src", entry.toURL());
+                    resolveResult.innerHTML = "Success resolve\n" + entry.toURL();
+                    logBox.appendChild(contactLabelImage);
+                    logBox.appendChild(contactImage);
+                    logBox.appendChild(resolveResult);
+                }, 
+                function(err) {
+                    console.log("resolve error" + err);
+                }); 
+            }
+            else {
+                resolveResult.innerHTML = "Contact has no photos";
+                logBox.appendChild(resolveResult);
+            }
+        }, 
+        function(err) {
+            console.log("contact pick error" + err);
+        });
+    }    
+
     function clearLog() {
         var log = document.getElementById("info");
         log.innerHTML = "";
@@ -3786,7 +3937,7 @@ exports.defineManualTests = function (contentEl, createActionButton) {
     var fsRoots = {
         "ios" : "library,library-nosync,documents,documents-nosync,cache,bundle,root,private",
         "osx" : "library,library-nosync,documents,documents-nosync,cache,bundle,root,private",
-        "android" : "files,files-external,documents,sdcard,cache,cache-external,root",
+        "android" : "files,files-external,documents,sdcard,cache,cache-external,assets,root",
         "amazon-fireos" : "files,files-external,documents,sdcard,cache,cache-external,root",
         "windows": "temporary,persistent"
     };
@@ -3839,4 +3990,23 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         'should be successfully resolved. Status box should say Successfully resolved. Both blue URLs below ' +
         'that should match.'));
     contentEl.appendChild(div);
+
+    div = document.createElement('h2');
+    div.appendChild(document.createTextNode('Resolving content urls'));
+    div.setAttribute("align", "center");
+    contentEl.appendChild(div);
+
+    div = document.createElement('div');
+    div.setAttribute("id", "contactButton");
+    div.setAttribute("align", "center");
+    contentEl.appendChild(div);
+
+    div = document.createElement('div');
+    div.setAttribute("id", "logContactBox");
+    div.setAttribute("align", "center");
+    contentEl.appendChild(div);
+
+    createActionButton('show-contact-image', function () {
+        resolveFsContactImage();
+    }, 'contactButton');    
 };

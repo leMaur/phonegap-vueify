@@ -21,8 +21,8 @@
 
 /* global Windows, WinJS, Vibration */
 
-function checkReqs(actionName, fail) {
-    if (!(Windows.Phone && Windows.Phone.Devices && Windows.Phone.Devices.Notification && Windows.Phone.Devices.Notification.VibrationDevice) && WinJS.Utilities.isPhone !== true) {       
+function checkReqs (actionName, fail) {
+    if (!(Windows.Phone && Windows.Phone.Devices && Windows.Phone.Devices.Notification && Windows.Phone.Devices.Notification.VibrationDevice) && WinJS.Utilities.isPhone !== true) {
         fail(actionName + ' is unsupported by this platform.');
         return false;
     }
@@ -30,7 +30,7 @@ function checkReqs(actionName, fail) {
     return true;
 }
 
-function tryDoAction(actionName, success, fail, args, action) {
+function tryDoAction (actionName, success, fail, args, action) {
     try {
         if (checkReqs(actionName, fail) !== true) {
             return;
@@ -43,7 +43,7 @@ function tryDoAction(actionName, success, fail, args, action) {
     }
 }
 
-/** 
+/**
  * @typedef patternParsingResult
  * @type {Object}
  * @property {Array} result.parsed - Array with parsed integers
@@ -56,8 +56,9 @@ function tryDoAction(actionName, success, fail, args, action) {
  * @param  {Array} pattern Array of delays
  * @returns {patternParsingResult} result
  */
-function tryParsePatternValues(pattern) {
-    var passed = true, failedItem;
+function tryParsePatternValues (pattern) {
+    var passed = true;
+    var failedItem;
 
     pattern = pattern.map(function (item) {
         var num = parseInt(item, 10);
@@ -76,7 +77,7 @@ function tryParsePatternValues(pattern) {
     };
 }
 
-/** 
+/**
  * @typedef checkPatternReqsResult
  * @type {Object}
  * @property {Array} result.patternParsingResult - Array with parsed integers
@@ -87,10 +88,11 @@ function tryParsePatternValues(pattern) {
  * Checks params for vibrateWithPattern function
  * @return {checkPatternReqsResult}
  */
-function checkPatternReqs(args, fail) {
+function checkPatternReqs (args, fail) {
     var patternParsingResult = tryParsePatternValues(args[0]);
     var repeat = args[1];
-    var passed = true, errMsg = '';
+    var passed = true;
+    var errMsg = '';
 
     if (!patternParsingResult.passed) {
         errMsg += 'Could not parse ' + patternParsingResult.failedItem + ' in the vibration pattern';
@@ -123,7 +125,7 @@ function checkPatternReqs(args, fail) {
  * @param  {Array} patternCycle Cycled part of the pattern array
  * @return {Promise} Promise chaining single vibrate/pause actions
  */
-function vibratePattern(patternArr, shouldRepeat, fail, patternCycle) {
+function vibratePattern (patternArr, shouldRepeat, fail, patternCycle) {
     return patternArr.reduce(function (previousValue, currentValue, index) {
         if (index % 2 === 0) {
             return previousValue.then(function () {
@@ -163,7 +165,7 @@ var VibrationDevice = (Windows.Phone && Windows.Phone.Devices && Windows.Phone.D
 if (VibrationDevice) {
     // Windows Phone 10 code paths
     module.exports = {
-        vibrate: function(success, fail, args) {
+        vibrate: function (success, fail, args) {
             try {
                 var duration = parseInt(args[0]);
                 if (isNaN(duration)) {
@@ -171,11 +173,10 @@ if (VibrationDevice) {
                 }
                 VibrationDevice.getDefault().vibrate(duration);
                 success();
-            }
-            catch (e) {
+            } catch (e) {
                 fail(e);
             }
-        }, 
+        },
         vibrateWithPattern: function (success, fail, args) {
             // Cancel current vibrations first
             module.exports.cancelVibration(function () {
@@ -196,7 +197,7 @@ if (VibrationDevice) {
                 patternChainPromise = vibratePattern(pattern, shouldRepeat, fail, patternCycle);
             }, fail);
         },
-        cancelVibration: function(success, fail, args) {
+        cancelVibration: function (success, fail, args) {
             try {
                 if (patternChainPromise) {
                     patternChainPromise.cancel();
@@ -205,27 +206,26 @@ if (VibrationDevice) {
                 if (success) {
                     success();
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 if (fail) {
                     fail(e);
                 }
             }
         }
     };
-} else if (typeof Vibration !== 'undefined' && Vibration.Vibration) { 
+} else if (typeof Vibration !== 'undefined' && Vibration.Vibration) {
     // Windows Phone 8.1 code paths
     module.exports = {
         vibrate: function (success, fail, args) {
-            tryDoAction("vibrate", success, fail, args, Vibration.Vibration.vibrate);
+            tryDoAction('vibrate', success, fail, args, Vibration.Vibration.vibrate);
         },
 
         vibrateWithPattern: function (success, fail, args) {
-            tryDoAction("vibrate", success, fail, [DEFAULT_DURATION], Vibration.Vibration.vibrate);
+            tryDoAction('vibrate', success, fail, [DEFAULT_DURATION], Vibration.Vibration.vibrate);
         },
 
         cancelVibration: function (success, fail, args) {
-            tryDoAction("cancelVibration", success, fail, args, Vibration.Vibration.cancelVibration);
+            tryDoAction('cancelVibration', success, fail, args, Vibration.Vibration.cancelVibration);
         }
     };
 } else {
@@ -250,4 +250,4 @@ if (VibrationDevice) {
     };
 }
 
-require("cordova/exec/proxy").add("Vibration", module.exports);
+require('cordova/exec/proxy').add('Vibration', module.exports);

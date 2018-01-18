@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-globalization"
-      version="1.0.3">
+      version="1.0.9">
     <name>Globalization</name>
     <description>Cordova Globalization Plugin</description>
     <license>Apache 2.0</license>
@@ -31,11 +31,11 @@
     <js-module src="www/GlobalizationError.js" name="GlobalizationError">
         <clobbers target="window.GlobalizationError" />
     </js-module>
-    
+
     <js-module src="www/globalization.js" name="globalization">
         <clobbers target="navigator.globalization" />
     </js-module>
-    
+
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -47,7 +47,7 @@
         <source-file src="src/android/Globalization.java" target-dir="src/org/apache/cordova/globalization" />
         <source-file src="src/android/GlobalizationError.java" target-dir="src/org/apache/cordova/globalization" />
     </platform>
-       
+
     <!-- amazon-fireos -->
     <platform name="amazon-fireos">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -59,7 +59,7 @@
         <source-file src="src/android/Globalization.java" target-dir="src/org/apache/cordova/globalization" />
         <source-file src="src/android/GlobalizationError.java" target-dir="src/org/apache/cordova/globalization" />
     </platform>
-    
+
    <!-- ubuntu -->
    <platform name="ubuntu">
        <header-file src="src/ubuntu/globalization.h" />
@@ -78,13 +78,13 @@
 		<asset src="www/firefoxos/locales" target="locales" />
 		<asset src="www/firefoxos/l10n.js" target="js/l10n.js" />
 		<asset src="www/firefoxos/l10n_date.js" target="js/l10n_date.js" />
-    </platform>  
+    </platform>
 
    <!-- ios -->
-   <platform name="ios">    
+   <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="Globalization">
-                <param name="ios-package" value="CDVGlobalization" /> 
+                <param name="ios-package" value="CDVGlobalization" />
             </feature>
         </config-file>
         <header-file src="src/ios/CDVGlobalization.h" />

@@ -1,7 +1,34 @@
 {
-  "name": "cordova-plugin-geolocation",
-  "version": "2.1.0",
-  "description": "Cordova Geolocation Plugin",
+  "_from": "cordova-plugin-geolocation@~2.4.3",
+  "_id": "cordova-plugin-geolocation@2.4.3",
+  "_inBundle": false,
+  "_integrity": "sha1-HdAAI9Hxos4zD4dn7Qj3tzj+cYQ=",
+  "_location": "/cordova-plugin-geolocation",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-geolocation@~2.4.3",
+    "name": "cordova-plugin-geolocation",
+    "escapedName": "cordova-plugin-geolocation",
+    "rawSpec": "~2.4.3",
+    "saveSpec": null,
+    "fetchSpec": "~2.4.3"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-geolocation/-/cordova-plugin-geolocation-2.4.3.tgz",
+  "_shasum": "1dd00023d1f1a2ce330f8767ed08f7b738fe7184",
+  "_spec": "cordova-plugin-geolocation@~2.4.3",
+  "_where": "/Users/janthoma/Desktop/bwfy",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-geolocation/issues"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-geolocation",
     "platforms": [
@@ -17,10 +44,19 @@
       "firefoxos"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-geolocation"
+  "deprecated": false,
+  "description": "Cordova Geolocation Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-geolocation#readme",
   "keywords": [
     "cordova",
     "geolocation",
@@ -36,6 +72,15 @@
     "cordova-windows",
     "cordova-firefoxos"
   ],
-  "author": "Apache Software Foundation",
-  "license": "Apache 2.0"
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-geolocation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-geolocation.git"
+  },
+  "scripts": {
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
+    "test": "npm run jshint"
+  },
+  "version": "2.4.3"
 }

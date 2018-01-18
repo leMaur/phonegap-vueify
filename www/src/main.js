@@ -1,42 +1,14 @@
+// The following line loads the standalone build of Vue instead of the runtime-only build,
+// so you don't have to do: import Vue from 'vue/dist/vue'
+// This is done with the browser options. For the config, see package.json
 import Vue from 'vue'
 import App from './App.vue'
+import Router from './router'
+import Store from './store'
 
-/* eslint-disable no-new */
-var Phonegap = {
-
-	// Application Constructor
-	initialize() {
-		this.bindEvents()
-	},
-
-	// Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-	bindEvents() {
-		document.addEventListener('deviceready', this.onDeviceReady, false)
-	},
-
-	// deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'Phonegap.receivedEvent(...);'
-	onDeviceReady() {
-		Phonegap.receivedEvent()
-	},
-
-	// Update DOM on a Received Event
-	receivedEvent() {
-		
-		console.log('The device is ready!')
-
-		// Load Vue instance
-		new Vue({
-		  el: 'body',
-		  components: { App }
-		})
-	}
-}
-
-
-Phonegap.initialize()
+new Vue({ // eslint-disable-line no-new
+    el: '#app',
+    store: Store,
+    router: Router,
+    render: (h) => h(App)
+})

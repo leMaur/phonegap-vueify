@@ -20,7 +20,6 @@
 #include <string>
 #include <json/reader.h>
 #include <json/writer.h>
-#include <sys/slog2.h>
 #include <unicode/calendar.h>
 #include <unicode/datefmt.h>
 #include <unicode/decimfmt.h>
@@ -95,16 +94,12 @@ std::string resultDateInJson(const UDate& date)
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
     if (!cal) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::resultInJson: failed to create Calendar instance: %d",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Failed to create Calendar instance!");
     }
     std::auto_ptr<Calendar> deleter(cal);
 
     cal->setTime(date, status);
     if (status != U_ZERO_ERROR && status != U_ERROR_WARNING_START) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::resultInJson: failed to setTime: %d",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Failed to set Calendar time!");
     }
 
@@ -217,7 +212,6 @@ static std::string readLanguageFromPPS()
     static const char* langfile = "/pps/services/confstr/_CS_LOCALE";
     int fd = ::open(langfile, O_RDONLY);
     if (fd < 0) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::readLanguageFromPPS: unable to open PPS file: %s.", langfile);
         return std::string();
     }
 
@@ -227,7 +221,6 @@ static std::string readLanguageFromPPS()
     ::close(fd);
 
     if (read <= 0) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::readLanguageFromPPS: unable to read PPS file: %s.", langfile);
         return std::string();
     }
 
@@ -235,7 +228,6 @@ static std::string readLanguageFromPPS()
     size_t pos = content.find_first_of("::");
 
     if (pos == std::string::npos) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::readLanguageFromPPS: unable to find signature \"_CS_LOCALE::\" in PPS file: %s.", langfile);
         return std::string();
     }
 
@@ -252,13 +244,11 @@ std::string GlobalizationNDK::getPreferredLanguage()
 
     const char* lang = loc.getLanguage();
     if (!lang || !strlen(lang)) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getPreferredLanguage: no language for current locale! Use \"en\" instead.");
         lang = "en";
     }
 
     const char* country = loc.getCountry();
     if (!country || !strlen(country)) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getPreferredLanguage: no country for current locale! Use \"US\" instead.");
         country = "US";
     }
 
@@ -271,13 +261,11 @@ std::string GlobalizationNDK::getLocaleName()
 
     const char* lang = loc.getLanguage();
     if (!lang) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getLocaleName: no language for current locale! Use \"en\" instead.");
         lang = "en";
     }
 
     const char* country = loc.getCountry();
     if (!country) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getLocaleName: no country for current locale! Use \"US\" instead.");
         country = "US";
     }
 
@@ -294,8 +282,6 @@ static bool handleDateOptions(const Json::Value& options, DateFormat::EStyle& da
         return true;
 
     if (!options.isObject()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: invalid options format: %d",
-                options.type());
         error = "Options is invalid!";
         return false;
     }
@@ -303,15 +289,12 @@ static bool handleDateOptions(const Json::Value& options, DateFormat::EStyle& da
     Json::Value flv = options["formatLength"];
     if (!flv.isNull()) {
         if (!flv.isString()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: invalid formatLength format: %d",
-                    flv.type());
             error = "formatLength is invalid!";
             return false;
         }
 
         std::string format = flv.asString();
         if (format.empty()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: empty formatLength!");
             error = "formatLength is empty!";
             return false;
         }
@@ -328,8 +311,6 @@ static bool handleDateOptions(const Json::Value& options, DateFormat::EStyle& da
         } else if (format == "short") {
             // Nothing to change here.
         } else {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: unsupported formatLength: %s",
-                    format.c_str());
             error = "Unsupported formatLength!";
             return false;
         }
@@ -338,15 +319,12 @@ static bool handleDateOptions(const Json::Value& options, DateFormat::EStyle& da
     Json::Value slv = options["selector"];
     if (!slv.isNull()) {
         if (!slv.isString()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: invalid selector format: %d",
-                    slv.type());
             error = "selector is invalid!";
             return false;
         }
 
         std::string selector = slv.asString();
         if (selector.empty()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: empty selector!");
             error = "selector is empty!";
             return false;
         }
@@ -359,8 +337,6 @@ static bool handleDateOptions(const Json::Value& options, DateFormat::EStyle& da
         else if (selector == "date and time") {
             // Nothing to do here.
         } else {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleDateOptions: unsupported selector: %s",
-                    selector.c_str());
             error = "Unsupported selector!";
             return false;
         }
@@ -379,20 +355,15 @@ std::string GlobalizationNDK::dateToString(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::dateToString: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Parameters not valid json format!");
     }
 
     Json::Value date = root["date"];
     if (date.isNull()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::dateToString: no date provided.");
         return errorInJson(PARSING_ERROR, "No date provided!");
     }
 
     if (!date.isNumeric()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::dateToString: date is not a numeric: %d.",
-                date.type());
         return errorInJson(PARSING_ERROR, "Date in wrong format!");
     }
 
@@ -409,7 +380,6 @@ std::string GlobalizationNDK::dateToString(const std::string& args)
     DateFormat* df = DateFormat::createDateTimeInstance(dstyle, tstyle, loc);
 
     if (!df) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::dateToString: unable to create DateFormat!");
         return errorInJson(UNKNOWN_ERROR, "Unable to create DateFormat instance!");
     }
     std::auto_ptr<DateFormat> deleter(df);
@@ -432,21 +402,16 @@ std::string GlobalizationNDK::stringToDate(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToDate: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Parameters not valid json format!");
     }
 
     Json::Value dateString = root["dateString"];
     if (!dateString.isString()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToDate: invalid dateString type: %d",
-                dateString.type());
         return errorInJson(PARSING_ERROR, "dateString not a string!");
     }
 
     std::string dateValue = dateString.asString();
     if (dateValue.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToDate: empty dateString.");
         return errorInJson(PARSING_ERROR, "dateString is empty!");
     }
 
@@ -461,7 +426,6 @@ std::string GlobalizationNDK::stringToDate(const std::string& args)
     DateFormat* df = DateFormat::createDateTimeInstance(dstyle, tstyle, loc);
 
     if (!df) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToDate: unable to create DateFormat instance!");
         return errorInJson(UNKNOWN_ERROR, "Unable to create DateFormat instance!");
     }
     std::auto_ptr<DateFormat> deleter(df);
@@ -472,8 +436,6 @@ std::string GlobalizationNDK::stringToDate(const std::string& args)
 
     // Note: not sure why U_ERROR_WARNING_START is returned when parse succeeded.
     if (status != U_ZERO_ERROR && status != U_ERROR_WARNING_START) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToDate: DataFormat::parse error: %d: %s",
-                status, dateValue.c_str());
         return errorInJson(PARSING_ERROR, "Failed to parse dateString!");
     }
 
@@ -490,8 +452,6 @@ std::string GlobalizationNDK::getDatePattern(const std::string& args)
         bool parse = reader.parse(args, root);
 
         if (!parse) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDatePattern: invalid json data: %s",
-                    args.c_str());
             return errorInJson(PARSING_ERROR, "Parameters not valid json format!");
         }
 
@@ -507,13 +467,11 @@ std::string GlobalizationNDK::getDatePattern(const std::string& args)
     DateFormat* df = DateFormat::createDateTimeInstance(dstyle, tstyle, loc);
 
     if (!df) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDatePattern: unable to create DateFormat instance!");
         return errorInJson(UNKNOWN_ERROR, "Unable to create DateFormat instance!");
     }
     std::auto_ptr<DateFormat> deleter(df);
 
     if (df->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDatePattern: DateFormat instance not SimpleDateFormat!");
         return errorInJson(UNKNOWN_ERROR, "DateFormat instance not SimpleDateFormat!");
     }
 
@@ -559,8 +517,6 @@ static bool handleNamesOptions(const Json::Value& options, ENamesType& type, ENa
         return true;
 
     if (!options.isObject()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: invalid options format: %d",
-                options.type());
         error = "Options is invalid!";
         return false;
     }
@@ -568,15 +524,12 @@ static bool handleNamesOptions(const Json::Value& options, ENamesType& type, ENa
     Json::Value tv = options["type"];
     if (!tv.isNull()) {
         if (!tv.isString()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: invalid type format: %d",
-                    tv.type());
             error = "type is invalid!";
             return false;
         }
 
         std::string tstr = tv.asString();
         if (tstr.empty()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: empty type!");
             error = "type is empty!";
             return false;
         }
@@ -586,8 +539,6 @@ static bool handleNamesOptions(const Json::Value& options, ENamesType& type, ENa
         } else if (tstr == "wide") {
             // Nothing to change here.
         } else {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: unsupported type: %s",
-                    tstr.c_str());
             error = "Unsupported type!";
             return false;
         }
@@ -596,15 +547,12 @@ static bool handleNamesOptions(const Json::Value& options, ENamesType& type, ENa
     Json::Value iv = options["item"];
     if (!iv.isNull()) {
         if (!iv.isString()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: invalid item format: %d",
-                    iv.type());
             error = "item is invalid!";
             return false;
         }
 
         std::string istr = iv.asString();
         if (istr.empty()) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: empty item!");
             error = "item is empty!";
             return false;
         }
@@ -614,8 +562,6 @@ static bool handleNamesOptions(const Json::Value& options, ENamesType& type, ENa
         } else if (istr == "months") {
             // Nothing to change here.
         } else {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNamesOptions: unsupported item: %s",
-                    istr.c_str());
             error = "Unsupported item!";
             return false;
         }
@@ -635,8 +581,6 @@ std::string GlobalizationNDK::getDateNames(const std::string& args)
         bool parse = reader.parse(args, root);
 
         if (!parse) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: invalid json data: %s",
-                    args.c_str());
             return errorInJson(PARSING_ERROR, "Parameters not valid json format!");
         }
 
@@ -678,13 +622,11 @@ std::string GlobalizationNDK::getDateNames(const std::string& args)
     DateFormat* df = DateFormat::createDateInstance(dstyle, loc);
 
     if (!df) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: unable to create DateFormat instance!");
         return errorInJson(UNKNOWN_ERROR, "Unable to create DateFormat instance!");
     }
     std::auto_ptr<DateFormat> deleter(df);
 
     if (df->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: DateFormat instance not SimpleDateFormat!");
         return errorInJson(UNKNOWN_ERROR, "DateFormat instance not SimpleDateFormat!");
     }
 
@@ -693,16 +635,12 @@ std::string GlobalizationNDK::getDateNames(const std::string& args)
 
     Calendar* cal = Calendar::createInstance(status);
     if (!cal) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: unable to create Calendar instance: %x.",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Unable to create Calendar instance!");
     }
     std::auto_ptr<Calendar> caldeleter(cal);
 
     UCalendarDaysOfWeek ud = cal->getFirstDayOfWeek(status);
     if (status != U_ZERO_ERROR && status != U_ERROR_WARNING_START) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: failed to getFirstDayOfWeek: %d!",
-                status);
         return errorInJson(PARSING_ERROR, "Failed to getFirstDayOfWeek!");
     }
 
@@ -731,8 +669,6 @@ std::string GlobalizationNDK::getDateNames(const std::string& args)
     }
 
     if (!utf8Names.size()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getDateNames: unable to get symbols: item: %d, type: %d.",
-                item, type);
         return errorInJson(UNKNOWN_ERROR, "Unable to get symbols!");
     }
 
@@ -742,7 +678,6 @@ std::string GlobalizationNDK::getDateNames(const std::string& args)
 std::string GlobalizationNDK::isDayLightSavingsTime(const std::string& args)
 {
     if (args.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::isDayLightSavingsTime: no date provided.");
         return errorInJson(UNKNOWN_ERROR, "No date is provided!");
     }
 
@@ -751,16 +686,12 @@ std::string GlobalizationNDK::isDayLightSavingsTime(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::isDayLightSavingsTime: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Parameters not valid json format!");
     }
 
     Json::Value dv = root["date"];
 
     if (!dv.isNumeric()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::isDayLightSavingsTime: invalid date format: %d",
-                dv.type());
         return errorInJson(PARSING_ERROR, "Invalid date format!");
     }
 
@@ -769,8 +700,6 @@ std::string GlobalizationNDK::isDayLightSavingsTime(const std::string& args)
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* sdf = new SimpleDateFormat(status);
     if (!sdf) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::isDayLightSavingsTime: unable to create SimpleDateFormat instance: %d.",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Unable to create SimpleDateFormat instance!");
     }
 
@@ -785,15 +714,11 @@ std::string GlobalizationNDK::getFirstDayOfWeek()
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
     if (!cal) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getFirstDayOfWeek: failed to create Calendar instance: %d",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Failed to create Calendar instance!");
     }
 
     UCalendarDaysOfWeek d = cal->getFirstDayOfWeek(status);
     if (status != U_ZERO_ERROR && status != U_ERROR_WARNING_START) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getFirstDayOfWeek: failed to call getFirstDayOfWeek: %d",
-                status);
         return errorInJson(UNKNOWN_ERROR, "Failed to call getFirstDayOfWeek!");
     }
 
@@ -813,29 +738,23 @@ static bool handleNumberOptions(const Json::Value& options, ENumberType& type, s
         return true;
 
     if (!options.isObject()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNumberOptions: invalid options type: %d",
-                options.type());
         error = "Invalid options type!";
         return false;
     }
 
     Json::Value tv = options["type"];
     if (tv.isNull()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNumberOptions: No type found!");
         error = "No type found!";
         return false;
     }
 
     if (!tv.isString()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNumberOptions: Invalid type type: %d",
-                tv.type());
         error = "Invalid type type!";
         return false;
     }
 
     std::string tstr = tv.asString();
     if (tstr.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNumberOptions: Empty type!");
         error = "Empty type!";
         return false;
     }
@@ -847,8 +766,6 @@ static bool handleNumberOptions(const Json::Value& options, ENumberType& type, s
     } else if (tstr == "decimal") {
         type = kNumberDecimal;
     } else {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::handleNumberOptions: unsupported type: %s",
-                tstr.c_str());
         error = "Unsupported type!";
         return false;
     }
@@ -859,7 +776,6 @@ static bool handleNumberOptions(const Json::Value& options, ENumberType& type, s
 std::string GlobalizationNDK::numberToString(const std::string& args)
 {
     if (args.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::numberToString: no arguments provided!");
         return errorInJson(UNKNOWN_ERROR, "No arguments provided!");
     }
 
@@ -868,20 +784,15 @@ std::string GlobalizationNDK::numberToString(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::numberToString: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Invalid json data!");
     }
 
     Json::Value nv = root["number"];
     if (nv.isNull()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::numberToString: no number provided!");
         return errorInJson(FORMATTING_ERROR, "No number provided!");
     }
 
     if (!nv.isNumeric()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::numberToString: invalid number type: %d!",
-                nv.type());
         return errorInJson(FORMATTING_ERROR, "Invalid number type!");
     }
 
@@ -909,8 +820,6 @@ std::string GlobalizationNDK::numberToString(const std::string& args)
     }
 
     if (!nf) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::numberToString: failed to create NumberFormat instance for type %d: %d",
-                status, type);
         return errorInJson(UNKNOWN_ERROR, "Failed to create NumberFormat instance!");
     }
     std::auto_ptr<NumberFormat> deleter(nf);
@@ -926,7 +835,6 @@ std::string GlobalizationNDK::numberToString(const std::string& args)
 std::string GlobalizationNDK::stringToNumber(const std::string& args)
 {
     if (args.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: no arguments provided!");
         return errorInJson(PARSING_ERROR, "No arguments provided!");
     }
 
@@ -935,26 +843,20 @@ std::string GlobalizationNDK::stringToNumber(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Invalid json data!");
     }
 
     Json::Value sv = root["numberString"];
     if (sv.isNull()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: no numberString provided!");
         return errorInJson(FORMATTING_ERROR, "No numberString provided!");
     }
 
     if (!sv.isString()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: invalid numberString type: %d!",
-                sv.type());
         return errorInJson(FORMATTING_ERROR, "Invalid numberString type!");
     }
 
     std::string str = sv.asString();
     if (str.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: empty numberString!");
         return errorInJson(FORMATTING_ERROR, "Empty numberString!");
     }
 
@@ -982,8 +884,6 @@ std::string GlobalizationNDK::stringToNumber(const std::string& args)
     }
 
     if (!nf) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: failed to create NumberFormat instance for type %d: %d",
-                status, type);
         return errorInJson(UNKNOWN_ERROR, "Failed to create NumberFormat instance!");
     }
     std::auto_ptr<NumberFormat> deleter(nf);
@@ -1002,14 +902,10 @@ std::string GlobalizationNDK::stringToNumber(const std::string& args)
         nf->parse(uStr, value, status);
 
     if (status != U_ZERO_ERROR && status != U_ERROR_WARNING_START) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: failed (%d) to parse string: %s",
-                status, str.c_str());
         return errorInJson(PARSING_ERROR, "Failed to parse string!");
     }
 
     if (!value.isNumeric()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::stringToNumber: string is not numeric: %s",
-                str.c_str());
         return errorInJson(FORMATTING_ERROR, "String is not numeric!");
     }
 
@@ -1027,8 +923,6 @@ std::string GlobalizationNDK::getNumberPattern(const std::string& args)
         bool parse = reader.parse(args, root);
 
         if (!parse) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getNumberPattern: invalid json data: %s",
-                    args.c_str());
             return errorInJson(PARSING_ERROR, "Invalid json data!");
         }
 
@@ -1058,22 +952,17 @@ std::string GlobalizationNDK::getNumberPattern(const std::string& args)
     }
 
     if (!nf) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getNumberPattern: failed to create NumberFormat instance for type %d: %d",
-                status, type);
         return errorInJson(UNKNOWN_ERROR, "Failed to create NumberFormat instance!");
     }
     std::auto_ptr<NumberFormat> deleter(nf);
 
     if (nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getNumberPattern: DecimalFormat expected: %p != %p",
-                nf->getDynamicClassID(), DecimalFormat::getStaticClassID());
         return errorInJson(UNKNOWN_ERROR, "DecimalFormat expected!");
     }
 
     DecimalFormat* df = (DecimalFormat*) nf;
     const DecimalFormatSymbols* dfs = df->getDecimalFormatSymbols();
     if (!dfs) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getNumberPattern: unable to get DecimalFormatSymbols!");
         return errorInJson(UNKNOWN_ERROR, "Failed to get DecimalFormatSymbols instance!");
     }
 
@@ -1122,7 +1011,6 @@ std::string GlobalizationNDK::getNumberPattern(const std::string& args)
 std::string GlobalizationNDK::getCurrencyPattern(const std::string& args)
 {
     if (args.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: no arguments provided!");
         return errorInJson(UNKNOWN_ERROR, "No arguments provided!");
     }
 
@@ -1131,26 +1019,20 @@ std::string GlobalizationNDK::getCurrencyPattern(const std::string& args)
     bool parse = reader.parse(args, root);
 
     if (!parse) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: invalid json data: %s",
-                args.c_str());
         return errorInJson(PARSING_ERROR, "Invalid json data!");
     }
 
     Json::Value ccv = root["currencyCode"];
     if (ccv.isNull()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: no currencyCode provided!");
         return errorInJson(FORMATTING_ERROR, "No currencyCode provided!");
     }
 
     if (!ccv.isString()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: invalid currencyCode type: %d!",
-                ccv.type());
         return errorInJson(FORMATTING_ERROR, "Invalid currencyCode type!");
     }
 
     std::string cc = ccv.asString();
     if (cc.empty()) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: empty currencyCode!");
         return errorInJson(FORMATTING_ERROR, "Empty currencyCode!");
     }
 
@@ -1162,16 +1044,12 @@ std::string GlobalizationNDK::getCurrencyPattern(const std::string& args)
         UErrorCode status = U_ZERO_ERROR;
         NumberFormat* nf = NumberFormat::createCurrencyInstance(*(locs + i), status);
         if (!nf) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: locale %d: unable to get NumberFormat instance!",
-                    i);
             continue;
         }
         std::auto_ptr<NumberFormat> ndeleter(nf);
 
         const UChar* currency = nf->getCurrency();
         if (!currency) {
-            slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: locale %d: failed to getCurrency!",
-                    i);
             continue;
         }
 
@@ -1188,7 +1066,6 @@ std::string GlobalizationNDK::getCurrencyPattern(const std::string& args)
 
     const DecimalFormatSymbols* dfs = df->getDecimalFormatSymbols();
     if (!dfs) {
-        slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationNDK::getCurrencyPattern: unable to get DecimalFormatSymbols!");
         return errorInJson(UNKNOWN_ERROR, "Failed to get DecimalFormatSymbols!");
     }
 

@@ -22,7 +22,6 @@
 
 var path = require('path'),
     clean = require('./lib/clean'),
-    reqs  = require('./lib/check_reqs'),
     args  = process.argv;
 
 // Support basic help commands
@@ -32,6 +31,6 @@ if ( args.length > 2
     console.log('Usage: ' + path.relative(process.cwd(), path.join(__dirname, 'clean')) );
     process.exit(0);
 } else {
-    clean.cleanProject();
+    clean.run();
 }
 

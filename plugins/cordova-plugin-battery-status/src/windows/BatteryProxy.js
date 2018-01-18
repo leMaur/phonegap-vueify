@@ -19,67 +19,107 @@
  *
  */
 
-/* global WinJS, BatteryStatus */
+/* global Windows, WinJS, BatteryStatus */
 
-var stopped;
+var PowerManager = Windows && Windows.System &&
+    Windows.System.Power && Windows.System.Power.PowerManager;
 
-function handleResponse(successCb, errorCb, jsonResponse) {
-    var info = JSON.parse(jsonResponse);
+if (PowerManager) {
+    var pluginCallback;
+    var reportStatus = function () {
+        if (!pluginCallback) {
+            return;
+        }
 
-    if (info.hasOwnProperty("exceptionMessage")) {
-        errorCb(info.exceptionMessage);
-        return;
-    }
+        pluginCallback({
+            level: PowerManager.remainingChargePercent,
+            isPlugged: PowerManager.powerSupplyStatus !== Windows.System.Power.PowerSupplyStatus.notPresent
+        }, { keepCallback: true });
+    };
 
-    successCb(info, { keepCallback: true });
+    var BatteryWin10 = {
+        start: function (win, fail) {
+            pluginCallback = win;
+            PowerManager.addEventListener('remainingchargepercentchanged', reportStatus);
+            PowerManager.addEventListener('powersupplystatuschanged', reportStatus);
+
+            reportStatus();
+        },
+
+        stop: function () {
+            if (pluginCallback) {
+                PowerManager.removeEventListener('remainingchargepercentchanged', reportStatus);
+                PowerManager.removeEventListener('powersupplystatuschanged', reportStatus);
+            }
+
+            pluginCallback = null;
+        }
+    };
+
+    require('cordova/exec/proxy').add('Battery', BatteryWin10);
+
+} else {
+
+    var stopped;
+
+    var handleResponse = function (successCb, errorCb, jsonResponse) {
+        var info = JSON.parse(jsonResponse);
+
+        if (info.hasOwnProperty('exceptionMessage')) {
+            errorCb(info.exceptionMessage);
+            return;
+        }
+
+        successCb(info, { keepCallback: true });
+    };
+
+    var Battery = {
+        start: function (win, fail, args, env) {
+            function getBatteryStatus (success, error) {
+                handleResponse(success, error, BatteryStatus.BatteryStatus.start());
+            }
+
+            function getBatteryStatusLevelChangeEvent (success, error) {
+                return BatteryStatus.BatteryStatus.getBatteryStatusChangeEvent().done(function (result) {
+                    if (stopped) {
+                        return;
+                    }
+
+                    handleResponse(success, error, result);
+
+                    setTimeout(function () { getBatteryStatusLevelChangeEvent(success, error); }, 0);
+                }, function (err) {
+                    fail(err);
+                });
+            }
+
+            // Battery API supported on Phone devices only so in case of
+            // desktop/tablet the only one choice is to fail with appropriate message.
+            if (!WinJS.Utilities.isPhone) {
+                fail('The operation is not supported on Windows Desktop devices.');
+                return;
+            }
+
+            stopped = false;
+            try {
+                getBatteryStatus(win, fail);
+                getBatteryStatusLevelChangeEvent(win, fail);
+            } catch (e) {
+                fail(e);
+            }
+        },
+
+        stop: function () {
+            // Battery API supported on Phone devices only so in case of
+            // desktop/tablet device we don't need for any actions.
+            if (!WinJS.Utilities.isPhone) {
+                return;
+            }
+
+            stopped = true;
+            BatteryStatus.BatteryStatus.stop();
+        }
+    };
+
+    require('cordova/exec/proxy').add('Battery', Battery);
 }
-
-var Battery = {
-    start: function (win, fail, args, env) {
-        function getBatteryStatus(success, error) {
-            handleResponse(success, error, BatteryStatus.BatteryStatus.start());
-        }
-
-        function getBatteryStatusLevelChangeEvent(success, error) {
-            return BatteryStatus.BatteryStatus.getBatteryStatusChangeEvent().done(function (result) {
-                if (stopped) {
-                    return;
-                }
-
-                handleResponse(success, error, result);
-
-                setTimeout(function() { getBatteryStatusLevelChangeEvent(success, error); }, 0);
-            }, function(err) {
-                fail(err);
-            });
-        }
-
-        // Battery API supported on Phone devices only so in case of
-        // desktop/tablet the only one choice is to fail with appropriate message.
-        if (!WinJS.Utilities.isPhone) {
-            fail("The operation is not supported on Windows Desktop devices.");
-            return;
-        }
-
-        stopped = false;
-        try {
-            getBatteryStatus(win, fail);
-            getBatteryStatusLevelChangeEvent(win, fail);
-        } catch(e) {
-            fail(e);
-        }
-    },
-
-    stop: function () {
-        // Battery API supported on Phone devices only so in case of
-        // desktop/tablet device we don't need for any actions.
-        if (!WinJS.Utilities.isPhone) {
-            return;
-        }
-
-        stopped = true;
-        BatteryStatus.BatteryStatus.stop();
-    }
-};
-
-require("cordova/exec/proxy").add("Battery", Battery);

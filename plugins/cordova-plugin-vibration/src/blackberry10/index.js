@@ -25,51 +25,51 @@ var vibration;
 
 module.exports = {
     vibrate: function (success, fail, args, env) {
-        var result = new PluginResult(args, env),
-            duration = args[0],
-            response = vibration.getInstance().vibrate(duration);
+        var result = new PluginResult(args, env);
+        var duration = args[0];
+        var response = vibration.getInstance().vibrate(duration);
         result.ok(response, false);
     }
 };
 
-///////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////
 // JavaScript wrapper for JNEXT plugin
-///////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////
 
 JNEXT.Vibration = function () {
-    var self = this,
-        hasInstance = false;
+    var self = this;
+    var hasInstance = false;
 
     self.vibrate = function (duration) {
-        //This is how Javascript calls into native
-        return JNEXT.invoke(self.m_id, "vibrate " + duration);
+        // This is how Javascript calls into native
+        return JNEXT.invoke(self.m_id, 'vibrate ' + duration);
     };
 
     self.init = function () {
-        //Checks that the jnext library is present and loads it
-        if (!JNEXT.require("libVibration")) {
+        // Checks that the jnext library is present and loads it
+        if (!JNEXT.require('libVibration')) {
             return false;
         }
 
-        //Creates the native object that this interface will call
-        self.m_id = JNEXT.createObject("libVibration.Vibration");
+        // Creates the native object that this interface will call
+        self.m_id = JNEXT.createObject('libVibration.Vibration');
 
-        if (self.m_id === "") {
+        if (self.m_id === '') {
             return false;
         }
 
-        //Registers for the JNEXT event loop
+        // Registers for the JNEXT event loop
         JNEXT.registerEvents(self);
     };
 
-    self.m_id = "";
+    self.m_id = '';
 
-    //Used by JNEXT library to get the ID
+    // Used by JNEXT library to get the ID
     self.getId = function () {
         return self.m_id;
     };
 
-    //Not truly required but useful for instance management
+    // Not truly required but useful for instance management
     self.getInstance = function () {
         if (!hasInstance) {
             self.init();

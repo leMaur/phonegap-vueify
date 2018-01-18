@@ -1,7 +1,34 @@
 {
-  "name": "cordova-plugin-media-capture",
-  "version": "1.2.0",
-  "description": "Cordova Media Capture Plugin",
+  "_from": "cordova-plugin-media-capture@~1.4.3",
+  "_id": "cordova-plugin-media-capture@1.4.3",
+  "_inBundle": false,
+  "_integrity": "sha1-IOO74zT7uJ9iSwIYjqxTcnQ5IPo=",
+  "_location": "/cordova-plugin-media-capture",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-media-capture@~1.4.3",
+    "name": "cordova-plugin-media-capture",
+    "escapedName": "cordova-plugin-media-capture",
+    "rawSpec": "~1.4.3",
+    "saveSpec": null,
+    "fetchSpec": "~1.4.3"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-media-capture/-/cordova-plugin-media-capture-1.4.3.tgz",
+  "_shasum": "20e3bbe334fbb89f624b02188eac5372743920fa",
+  "_spec": "cordova-plugin-media-capture@~1.4.3",
+  "_where": "/Users/janthoma/Desktop/bwfy",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-media-capture/issues"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-media-capture",
     "platforms": [
@@ -16,10 +43,19 @@
       "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-media-capture"
+  "deprecated": false,
+  "description": "Cordova Media Capture Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-media-capture#readme",
   "keywords": [
     "cordova",
     "media",
@@ -35,9 +71,16 @@
     "cordova-windows8",
     "cordova-windows"
   ],
-  "peerDependencies": {
-    "cordova-plugin-file": "^3.0.0"
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-media-capture",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-media-capture.git"
   },
-  "author": "Apache Software Foundation",
-  "license": "Apache 2.0"
+  "scripts": {
+    "jshint": "jshint www && jshint src && jshint tests",
+    "test": "npm run jshint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.4.3"
 }

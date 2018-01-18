@@ -19,10 +19,10 @@
  *
  */
 
-var mozBattery = cordova.require('cordova/modulemapper').getOriginalSymbol(window, 'navigator.battery') || navigator.mozBattery;
+var mozBattery = cordova.require('cordova/modulemapper').getOriginalSymbol(window, 'navigator.battery') || navigator.mozBattery; // eslint-disable-line no-undef
 
 var Battery = {
-    start: function(successCB, failCB, args, env) {
+    start: function (successCB, failCB, args, env) {
         if (mozBattery) {
             Battery.attachListeners(successCB);
         } else {
@@ -30,32 +30,32 @@ var Battery = {
         }
     },
 
-    stop: function() {
+    stop: function () {
         Battery.detachListeners();
     },
 
-    attachListeners: function(_callBack) {
+    attachListeners: function (_callBack) {
 
         Battery.updateBatteryStatus(_callBack); // send a battery status event
 
-        mozBattery.addEventListener("chargingchange", function(){
+        mozBattery.addEventListener('chargingchange', function () {
             _callBack({level: (mozBattery.level * 100), isPlugged: mozBattery.charging});
         });
 
-        mozBattery.addEventListener("levelchange", function(){
+        mozBattery.addEventListener('levelchange', function () {
             _callBack({level: (mozBattery.level * 100), isPlugged: mozBattery.charging});
         });
     },
 
-    detachListeners: function() {
+    detachListeners: function () {
 
-        mozBattery.removeEventListener("chargingchange", null);
-        mozBattery.removeEventListener("levelchange", null);
+        mozBattery.removeEventListener('chargingchange', null);
+        mozBattery.removeEventListener('levelchange', null);
     },
 
-    updateBatteryStatus: function(_callBack) {
+    updateBatteryStatus: function (_callBack) {
         _callBack({level: (mozBattery.level * 100), isPlugged: mozBattery.charging});
     }
 };
 
-require("cordova/exec/proxy").add("Battery", Battery);
+require('cordova/exec/proxy').add('Battery', Battery);
