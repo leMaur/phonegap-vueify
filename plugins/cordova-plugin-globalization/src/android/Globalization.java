@@ -347,6 +347,7 @@ public class Globalization extends CordovaPlugin  {
 
             obj.put("pattern", fmt);
             obj.put("timezone", tz.getDisplayName(tz.inDaylightTime(Calendar.getInstance().getTime()),TimeZone.SHORT));
+            obj.put("iana_timezone", tz.getID());
             obj.put("utc_offset", tz.getRawOffset()/1000);
             obj.put("dst_offset", tz.getDSTSavings()/1000);
             return obj;

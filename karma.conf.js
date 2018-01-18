@@ -3,10 +3,10 @@ module.exports = function (config) {
   config.set({
     browsers: ['PhantomJS'],
     frameworks: ['browserify', 'jasmine'],
-    files: ['www/test/unit/**/*.js'],
+    files: ['test/unit/**/*.js'],
     reporters: ['spec'],
     preprocessors: {
-      'www/test/unit/**/*.js': ['browserify']
+      'test/unit/**/*.js': ['browserify']
     },
     browserify: {
       debug: true,

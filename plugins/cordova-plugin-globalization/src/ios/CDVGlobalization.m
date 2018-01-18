@@ -391,9 +391,10 @@
 
     // put the pattern and time zone information into the dictionary
     if ((datePattern != nil) && (timezone != nil)) {
-        NSArray* keys = [NSArray arrayWithObjects:@"pattern", @"timezone", @"utc_offset", @"dst_offset", nil];
+        NSArray* keys = [NSArray arrayWithObjects:@"pattern", @"timezone", @"iana_timezone", @"utc_offset", @"dst_offset", nil];
         NSArray* values = [NSArray arrayWithObjects:((__bridge NSString*)datePattern),
             [((__bridge NSTimeZone*)timezone)abbreviation],
+            [((__bridge NSTimeZone*)timezone)name],
             [NSNumber numberWithLong:[((__bridge NSTimeZone*)timezone)secondsFromGMT]],
             [NSNumber numberWithDouble:[((__bridge NSTimeZone*)timezone)daylightSavingTimeOffset]],
             nil];

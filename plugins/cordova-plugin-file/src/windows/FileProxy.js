@@ -154,8 +154,13 @@ var WinFS = function(name, root) {
     if (this.winpath && !/\/$/.test(this.winpath)) {
         this.winpath += "/";
     }
-    this.makeNativeURL = function(path) {
-        return FileSystem.encodeURIPath(this.root.nativeURL + sanitize(path.replace(':','%3A')));};
+    this.makeNativeURL = function (path) {        
+        //CB-11848: This RE supposed to match all leading slashes in sanitized path. 
+        //Removing leading slash to avoid duplicating because this.root.nativeURL already has trailing slash
+        var regLeadingSlashes = /^\/*/;
+        var sanitizedPath = sanitize(path.replace(':', '%3A')).replace(regLeadingSlashes, '');
+        return FileSystem.encodeURIPath(this.root.nativeURL + sanitizedPath);
+    };
     root.fullPath = '/';
     if (!root.nativeURL)
             root.nativeURL = 'file://'+sanitize(this.winpath + root.fullPath).replace(':','%3A');
@@ -194,6 +199,12 @@ function getAllFS() {
                 name: 'temporary', 
                 nativeURL: 'ms-appdata:///temp',
                 winpath: nativePathToCordova(Windows.Storage.ApplicationData.current.temporaryFolder.path)
+            })),
+            'application':
+            Object.freeze(new WinFS('application', { 
+                name: 'application', 
+                nativeURL: 'ms-appx:///',
+                winpath: nativePathToCordova(Windows.ApplicationModel.Package.current.installedLocation.path)
             })),
             'root':
             Object.freeze(new WinFS('root', { 
@@ -244,7 +255,7 @@ function pathFromURL(url) {
         }
     }
     
-    ['file://','ms-appdata:///','cdvfile://localhost/'].every(function(p) {
+    ['file://','ms-appdata:///','ms-appx://','cdvfile://localhost/'].every(function(p) {
         if (path.indexOf(p)!==0)
             return true;
         var thirdSlash = path.indexOf("/", p.length);
@@ -393,8 +404,8 @@ function moveFolder(src,dst,name) {
                         src.deleteAsync().done(complete,failed);
                         return;
                     }
-                    moveFolder(the.folders[todo],dst)
-                    .done(movefolders,failed); 
+                    moveFolder(the.folders[todo], the.fld)
+                    .done(movefolders,failed);
                 };
                 var movefiles = function() {
                     if (!(todo--)) {

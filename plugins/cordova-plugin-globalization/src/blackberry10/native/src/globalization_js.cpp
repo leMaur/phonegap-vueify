@@ -13,50 +13,10 @@
  */
 
 #include <string>
-#include <sys/slog2.h>
 #include "globalization_js.hpp"
 #include "globalization_ndk.hpp"
 
 using namespace std;
-
-// This can be any 16 bit integer value. It is used only for our own
-// logs identification when calling slog2f().
-const unsigned short ID_G11N = 22549;
-
-void setupLogging()
-{
-    static bool inited = false;
-
-    if (inited)
-        return;
-
-    inited = true;
-
-    // Reset the log buffers in case this is after a fork. (If there were no log buffers, this does
-    // nothing.)
-    int rc = slog2_reset();
-    if (rc < 0) {
-        fprintf(stderr, "Globalization: Error resetting slog2 buffer!\n");
-        return;
-    }
-
-    // Set up default slog2 buffer
-    slog2_buffer_set_config_t bufferConfigSet;
-    bufferConfigSet.buffer_set_name = "Globalization";
-    bufferConfigSet.num_buffers = 1;
-    bufferConfigSet.verbosity_level = SLOG2_INFO;
-    bufferConfigSet.buffer_config[0].buffer_name = "default";
-    bufferConfigSet.buffer_config[0].num_pages = 8;
-
-    slog2_buffer_t bufferHandle;
-    rc = slog2_register(&bufferConfigSet, &bufferHandle, 0);
-    if (rc < 0) {
-        fprintf(stderr, "Globalization: Error registering slogger2 buffer!\n");
-        return;
-    }
-
-    slog2_set_default_buffer(bufferHandle);
-}
 
 /**
  * Default constructor.
@@ -88,11 +48,6 @@ char* onGetObjList() {
  * an object is created on the JavaScript server side.
  */
 JSExt* onCreateObject(const string& className, const string& id) {
-	setupLogging();
-
-	slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationJS::onCreateObject(%s, %s)",
-			className.c_str(), id.c_str());
-
 	if (className == "Globalization") {
 		return new GlobalizationJS(id);
 	}
@@ -114,8 +69,6 @@ bool GlobalizationJS::CanDelete() {
  * called on the JavaScript side with this native objects id.
  */
 string GlobalizationJS::InvokeMethod(const string& command) {
-	slog2f(0, ID_G11N, SLOG2_ERROR, "GlobalizationJS::InvokeMethod(%s)", command.c_str());
-
 	// format must be: "command callbackId params"
 	size_t commandIndex = command.find_first_of(" ");
 	std::string strCommand = command.substr(0, commandIndex);

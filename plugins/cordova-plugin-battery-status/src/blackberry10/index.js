@@ -21,32 +21,32 @@
 
 /* global PluginResult */
 
-var _clientListeners = {},
-    _webkitBattery = navigator.webkitBattery || navigator.battery;
+var _clientListeners = {};
+var _webkitBattery = navigator.webkitBattery || navigator.battery;
 
 module.exports = {
     start: function (success, fail, args, env) {
-        var result = new PluginResult(args, env),
-            listener = function (info) {
-                var resultInfo = {};
-                if (info) {
-                    if (info.srcElement) {
-                        //webkitBattery listeners store webkitBattery in srcElement object
-                        info = info.srcElement;
-                    }
-
-                    //put data from webkitBattery into a format cordova expects
-                    //webkitBattery seems to return level as a decimal pre 10.2
-                    resultInfo.level = info.level <= 1 ? info.level * 100 : info.level;
-                    resultInfo.isPlugged = info.charging;
+        var result = new PluginResult(args, env);
+        var listener = function (info) {
+            var resultInfo = {};
+            if (info) {
+                if (info.srcElement) {
+                    // webkitBattery listeners store webkitBattery in srcElement object
+                    info = info.srcElement;
                 }
 
-                result.callbackOk(resultInfo, true);
-            };
+                // put data from webkitBattery into a format cordova expects
+                // webkitBattery seems to return level as a decimal pre 10.2
+                resultInfo.level = info.level <= 1 ? info.level * 100 : info.level;
+                resultInfo.isPlugged = info.charging;
+            }
+
+            result.callbackOk(resultInfo, true);
+        };
 
         if (_clientListeners[env.webview.id]) {
-            //TODO: Change back to erroring out after reset is implemented
-            //result.error("Battery listener already running");
+            // TODO: Change back to erroring out after reset is implemented
+            // result.error("Battery listener already running");
             _webkitBattery.onchargingchange = null;
             _webkitBattery.onlevelchange = null;
         }
@@ -56,19 +56,19 @@ module.exports = {
         _webkitBattery.onchargingchange = listener;
         _webkitBattery.onlevelchange = listener;
 
-        setTimeout(function(){
-            //Call callback with webkitBattery data right away
+        setTimeout(function () {
+            // Call callback with webkitBattery data right away
             listener(_webkitBattery);
         });
 
         result.noResult(true);
     },
     stop: function (success, fail, args, env) {
-        var result = new PluginResult(args, env),
-            listener = _clientListeners[env.webview.id];
+        var result = new PluginResult(args, env);
+        var listener = _clientListeners[env.webview.id];
 
         if (!listener) {
-            result.error("Battery listener has not started");
+            result.error('Battery listener has not started');
         } else {
             _webkitBattery.onchargingchange = null;
             _webkitBattery.onlevelchange = null;

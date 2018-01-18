@@ -24,24 +24,24 @@
 var batteryListenerId = null;
 
 module.exports = {
-    start: function(successCallback, errorCallback) {
-        var batterySuccessCallback = function(power) {
+    start: function (successCallback, errorCallback) {
+        var batterySuccessCallback = function (power) {
             if (successCallback) {
                 successCallback({level: Math.round(power.level * 100), isPlugged: power.isCharging});
             }
         };
 
         if (batteryListenerId === null) {
-            batteryListenerId = tizen.systeminfo.addPropertyValueChangeListener("BATTERY", batterySuccessCallback);
+            batteryListenerId = tizen.systeminfo.addPropertyValueChangeListener('BATTERY', batterySuccessCallback);
         }
 
-        tizen.systeminfo.getPropertyValue("BATTERY", batterySuccessCallback, errorCallback);
+        tizen.systeminfo.getPropertyValue('BATTERY', batterySuccessCallback, errorCallback);
     },
 
-    stop: function(successCallback, errorCallback) {
+    stop: function (successCallback, errorCallback) {
         tizen.systeminfo.removePropertyValueChangeListener(batteryListenerId);
         batteryListenerId = null;
     }
 };
 
-require("cordova/tizen/commandProxy").add("Battery", module.exports);
+require('cordova/tizen/commandProxy').add('Battery', module.exports);

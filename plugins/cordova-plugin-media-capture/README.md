@@ -1,3 +1,7 @@
+---
+title: Media Capture
+description: Capture audio, video, and images.
+---
 <!--
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -16,6 +20,10 @@
 #         specific language governing permissions and limitations
 #         under the License.
 -->
+
+|Android 4.4|Android 5.1|Android 6.0|iOS 9.3|iOS 10.0|Windows 10 Store|Travis CI|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-media-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-media-capture/)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-media-capture.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-media-capture)|
 
 # cordova-plugin-media-capture
 
@@ -44,6 +52,8 @@ Although in the global scope, it is not available until after the `deviceready` 
     function onDeviceReady() {
         console.log(navigator.device.capture);
     }
+
+Report issues with this plugin on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Media%20Capture%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
 
 ## Installation
 
@@ -151,40 +161,6 @@ code.
 
 - Windows Phone 7 does not have a default audio recording application, so a simple user interface is provided.
 
-## CaptureAudioOptions
-
-> Encapsulates audio capture configuration options.
-
-### Properties
-
-- __limit__: The maximum number of audio clips the device user can record in a single capture operation.  The value must be greater than or equal to 1 (defaults to 1).
-
-- __duration__: The maximum duration of an audio sound clip, in seconds.
-
-### Example
-
-    // limit capture operation to 3 media files, no longer than 10 seconds each
-    var options = { limit: 3, duration: 10 };
-
-    navigator.device.capture.captureAudio(captureSuccess, captureError, options);
-
-### Amazon Fire OS Quirks
-
-- The `duration` parameter is not supported.  Recording lengths cannot be limited programmatically.
-
-### Android Quirks
-
-- The `duration` parameter is not supported.  Recording lengths can't be limited programmatically.
-
-### BlackBerry 10 Quirks
-
-- The `duration` parameter is not supported.  Recording lengths can't be limited programmatically.
-- The `limit` parameter is not supported, so only one recording can be created for each invocation.
-
-### iOS Quirks
-
-- The `limit` parameter is not supported, so only one recording can be created for each invocation.
-
 ## capture.captureImage
 
 > Start the camera application and return information about captured image files.
@@ -201,7 +177,7 @@ one image in a single session.
 
 The capture operation ends either when the user closes the camera
 application, or the maximum number of recordings specified by
-`CaptureAudioOptions.limit` is reached.  If no `limit` value is
+`CaptureImageOptions.limit` is reached.  If no `limit` value is
 specified, it defaults to one (1), and the capture operation
 terminates after the user captures a single image.
 
@@ -222,6 +198,29 @@ object featuring a `CaptureError.CAPTURE_NO_MEDIA_FILES` error code.
 - Windows 8
 - Windows
 
+### iOS Quirks
+
+Since iOS 10 it's mandatory to add a `NSCameraUsageDescription`, `NSMicrophoneUsageDescription` and `NSPhotoLibraryUsageDescriptionentry` in the info.plist.
+
+* `NSCameraUsageDescription` describes the reason that the app accesses the user’s camera.
+* `NSMicrophoneUsageDescription` describes the reason that the app accesses the user’s microphone.
+* `NSPhotoLibraryUsageDescriptionentry` describes the reason the app accesses the user's photo library.
+
+When the system prompts the user to allow access, this string is displayed as part of the dialog box.
+
+To add this entry you can pass the following variables on plugin install.
+
+* `CAMERA_USAGE_DESCRIPTION` for `NSCameraUsageDescription`
+* `MICROPHONE_USAGE_DESCRIPTION` for `NSMicrophoneUsageDescription`
+* `PHOTOLIBRARY_USAGE_DESCRIPTION` for `NSPhotoLibraryUsageDescriptionentry`
+
+-
+Example:
+
+`cordova plugin add cordova-plugin-media-capture --variable CAMERA_USAGE_DESCRIPTION="your usage message"`
+
+If you don't pass the variable, the plugin will add an empty string as value.
+
 ### Windows Phone 7 Quirks
 
 Invoking the native camera application while your device is connected
@@ -232,7 +231,7 @@ via Zune does not work, and the error callback executes.
 Works in Chrome, Firefox and Opera only (since IE and Safari doesn't supports
 navigator.getUserMedia API)
 
-Displaying images using captured file's URL available in Chrome/Opera only. 
+Displaying images using captured file's URL available in Chrome/Opera only.
 Firefox stores captured images in IndexedDB storage (see File plugin documentation),
 and due to this the only way to show captured image is to read it and show using its DataURL.
 
@@ -254,27 +253,6 @@ and due to this the only way to show captured image is to read it and show using
 
     // start image capture
     navigator.device.capture.captureImage(captureSuccess, captureError, {limit:2});
-
-
-
-## CaptureImageOptions
-
-> Encapsulates image capture configuration options.
-
-### Properties
-
-- __limit__: The maximum number of images the user can capture in a single capture operation. The value must be greater than or equal to 1 (defaults to 1).
-
-### Example
-
-    // limit capture operation to 3 images
-    var options = { limit: 3 };
-
-    navigator.device.capture.captureImage(captureSuccess, captureError, options);
-
-### iOS Quirks
-
-- The __limit__ parameter is not supported, and only one image is taken per invocation.
 
 ## capture.captureVideo
 
@@ -338,6 +316,61 @@ capturing a video clip, the `CaptureErrorCB` callback executes with a
 - Cordova for BlackBerry 10 attempts to launch the __Video Recorder__ application, provided by RIM, to capture video recordings. The app receives a `CaptureError.CAPTURE_NOT_SUPPORTED` error code if the application is not installed on the device.
 
 
+## CaptureAudioOptions
+
+> Encapsulates audio capture configuration options.
+
+### Properties
+
+- __limit__: The maximum number of audio clips the device user can record in a single capture operation.  The value must be greater than or equal to 1 (defaults to 1).
+
+- __duration__: The maximum duration of an audio sound clip, in seconds.
+
+### Example
+
+    // limit capture operation to 3 media files, no longer than 10 seconds each
+    var options = { limit: 3, duration: 10 };
+
+    navigator.device.capture.captureAudio(captureSuccess, captureError, options);
+
+### Amazon Fire OS Quirks
+
+- The `duration` parameter is not supported.  Recording lengths cannot be limited programmatically.
+
+### Android Quirks
+
+- The `duration` parameter is not supported.  Recording lengths can't be limited programmatically.
+
+### BlackBerry 10 Quirks
+
+- The `duration` parameter is not supported.  Recording lengths can't be limited programmatically.
+- The `limit` parameter is not supported, so only one recording can be created for each invocation.
+
+### iOS Quirks
+
+- The `limit` parameter is not supported, so only one recording can be created for each invocation.
+
+
+## CaptureImageOptions
+
+> Encapsulates image capture configuration options.
+
+### Properties
+
+- __limit__: The maximum number of images the user can capture in a single capture operation. The value must be greater than or equal to 1 (defaults to 1).
+
+### Example
+
+    // limit capture operation to 3 images
+    var options = { limit: 3 };
+
+    navigator.device.capture.captureImage(captureSuccess, captureError, options);
+
+### iOS Quirks
+
+- The __limit__ parameter is not supported, and only one image is taken per invocation.
+
+
 ## CaptureVideoOptions
 
 > Encapsulates video capture configuration options.
@@ -365,8 +398,8 @@ capturing a video clip, the `CaptureErrorCB` callback executes with a
 
 ### Android Quirks
 
-- Android supports an additional __quality__ property, to allow capturing video at different qualities.  A value of `1` ( the default ) means high quality and value of `0` means low quality, suitable for MMS messages. 
-  See http://developer.android.com/reference/android/provider/MediaStore.html#EXTRA_VIDEO_QUALITY for more details.
+- Android supports an additional __quality__ property, to allow capturing video at different qualities.  A value of `1` ( the default ) means high quality and value of `0` means low quality, suitable for MMS messages.
+  See [here](http://developer.android.com/reference/android/provider/MediaStore.html#EXTRA_VIDEO_QUALITY) for more details.
 
 ### Example ( Android w/ quality )
 
@@ -418,6 +451,8 @@ Each `MediaFile` object describes a captured media file.
 - `CaptureError.CAPTURE_INVALID_ARGUMENT`: Invalid use of the API (e.g., the value of `limit` is less than one).
 
 - `CaptureError.CAPTURE_NO_MEDIA_FILES`: The user exits the camera or audio capture application before capturing anything.
+
+- `CaptureError.CAPTURE_PERMISSION_DENIED`: The user denied a permission required to perform the given capture request.
 
 - `CaptureError.CAPTURE_NOT_SUPPORTED`: The requested capture operation is not supported.
 
@@ -627,3 +662,41 @@ Supports the following `MediaFileData` properties:
 - __width__: Supported: image and video files only.
 
 - __duration__: Supported: audio and video files only.
+
+## Android Lifecycle Quirks
+
+When capturing audio, video, or images on the Android platform, there is a chance that the
+application will get destroyed after the Cordova Webview is pushed to the background by
+the native capture application. See the [Android Lifecycle Guide][android-lifecycle] for
+a full description of the issue. In this case, the success and failure callbacks passed
+to the capture method will not be fired and instead the results of the call will be
+delivered via a document event that fires after the Cordova [resume event][resume-event].
+
+In your app, you should subscribe to the two possible events like so:
+
+```javascript
+function onDeviceReady() {
+    // pendingcaptureresult is fired if the capture call is successful
+    document.addEventListener('pendingcaptureresult', function(mediaFiles) {
+        // Do something with result
+    });
+
+    // pendingcaptureerror is fired if the capture call is unsuccessful
+    document.addEventListener('pendingcaptureerror', function(error) {
+        // Handle error case
+    });
+}
+
+// Only subscribe to events after deviceready fires
+document.addEventListener('deviceready', onDeviceReady);
+```
+
+It is up you to track what part of your code these results are coming from. Be sure to
+save and restore your app's state as part of the [pause][pause-event] and
+[resume][resume-event] events as appropriate. Please note that these events will only
+fire on the Android platform and only when the Webview was destroyed during a capture
+operation.
+
+[android-lifecycle]: http://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#lifecycle-guide
+[pause-event]: http://cordova.apache.org/docs/en/latest/cordova/events/events.html#pause
+[resume-event]: http://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume

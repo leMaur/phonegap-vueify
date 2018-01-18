@@ -22,14 +22,14 @@ cordova.define("cordova-plugin-battery-status.Battery", function(require, export
 var w3cBattery;
 var winCallBack;
 
-function success() {
+function success () {
     winCallBack({ level: w3cBattery.level * 100, isPlugged: w3cBattery.charging });
 }
 
 var Battery = {
-    start: function(win, fail, args, env) {
+    start: function (win, fail, args, env) {
         try {
-            var subscribe = function(battery) {
+            var subscribe = function (battery) {
                 w3cBattery = battery;
                 winCallBack = win;
 
@@ -45,11 +45,11 @@ var Battery = {
             };
 
             if (typeof navigator.getBattery === 'function') {
-                navigator.getBattery().then(function(battery) { 
-                    subscribe(battery); 
+                navigator.getBattery().then(function (battery) {
+                    subscribe(battery);
                 });
             } else {
-                var origBattery = cordova.require('cordova/modulemapper').getOriginalSymbol(window, 'navigator.battery');
+                var origBattery = cordova.require('cordova/modulemapper').getOriginalSymbol(window, 'navigator.battery'); // eslint-disable-line no-undef
 
                 if (origBattery) {
                     subscribe(origBattery);
@@ -57,12 +57,12 @@ var Battery = {
                     fail('Not supported');
                 }
             }
-        } catch(e) {
+        } catch (e) {
             fail(e);
         }
     },
 
-    stop: function() {
+    stop: function () {
         try {
             if (typeof w3cBattery.removeEventListener === 'function') {
                 w3cBattery.removeEventListener('levelchange', success, false);
@@ -71,12 +71,12 @@ var Battery = {
                 w3cBattery.onlevelchange = null;
                 w3cBattery.onchargingchange = null;
             }
-        } catch(e) {
+        } catch (e) {
             console.warn('Error occured while trying to stop battery: ' + JSON.stringify(e));
         }
     }
 };
 
-require("cordova/exec/proxy").add("Battery", Battery);
+require('cordova/exec/proxy').add('Battery', Battery);
 
 });

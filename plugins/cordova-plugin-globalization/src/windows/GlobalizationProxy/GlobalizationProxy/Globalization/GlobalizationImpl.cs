@@ -349,7 +349,7 @@ namespace GlobalizationProxy.Globalization
             }
 
             TimeZoneInfo localZone = TimeZoneInfo.Local;
-            return new DatePattern(pattern, localZone.DisplayName, localZone.BaseUtcOffset.TotalSeconds, 0);
+            return new DatePattern(pattern, localZone.DisplayName, String.Empty, localZone.BaseUtcOffset.TotalSeconds, 0);
         }
 
         /// <summary>

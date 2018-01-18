@@ -1,3 +1,7 @@
+---
+title: Dialogs
+description: Use native dialog UI elements
+---
 <!--
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -17,7 +21,9 @@
 #         under the License.
 -->
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-dialogs.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-dialogs)
+|AppVeyor|Travis CI|
+|:-:|:-:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-dialogs?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-dialogs)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-dialogs.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-dialogs)|
 
 # cordova-plugin-dialogs
 
@@ -79,6 +85,7 @@ function, which is typically less customizable.
 - Amazon Fire OS
 - Android
 - BlackBerry 10
+- Browser
 - Firefox OS
 - iOS
 - Tizen
@@ -143,12 +150,17 @@ indexing, so the value is `1`, `2`, `3`, etc.
 - Amazon Fire OS
 - Android
 - BlackBerry 10
+- Browser
 - Firefox OS
 - iOS
 - Tizen
 - Windows Phone 7 and 8
 - Windows 8
 - Windows
+
+### Android Quirks
+
+- Android supports a maximum of three buttons, and ignores any more than that.
 
 ### Windows Phone 7 and 8 Quirks
 
@@ -214,6 +226,7 @@ contains the following properties:
 
 - Amazon Fire OS
 - Android
+- Browser
 - Firefox OS
 - iOS
 - Windows Phone 7 and 8
@@ -252,6 +265,7 @@ The device plays a beep sound.
 - Amazon Fire OS
 - Android
 - BlackBerry 10
+- Browser
 - iOS
 - Tizen
 - Windows Phone 7 and 8

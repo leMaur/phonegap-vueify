@@ -20,11 +20,46 @@
 -->
 # Release Notes
 
+### 1.0.9 (Dec 15, 2017)
+* Deprecated this plugin. Read our migration guide at https://cordova.apache.org/news/2017/11/20/migrate-from-cordova-globalization-plugin.html
+* Update moment.js to version `2.19.1`
+
+### 1.0.8 (Nov 06, 2017)
+* [CB-13473](https://issues.apache.org/jira/browse/CB-13473) (CI) Removed **Browser** builds from AppVeyor
+* [CB-13472](https://issues.apache.org/jira/browse/CB-13472) (CI) Fixed Travis **Android** builds again
+* [CB-13299](https://issues.apache.org/jira/browse/CB-13299) (CI) Fix **Android** builds
+* [CB-12895](https://issues.apache.org/jira/browse/CB-12895) added `eslint` and removed `jshint`
+* [CB-13028](https://issues.apache.org/jira/browse/CB-13028) (CI) **Browser** builds on Travis and AppVeyor
+* [CB-12847](https://issues.apache.org/jira/browse/CB-12847) added `bugs` entry to `package.json`.
+
+### 1.0.7 (Apr 27, 2017)
+* [CB-12622](https://issues.apache.org/jira/browse/CB-12622) Added **Android 6.0** build badge to `README`
+* [CB-12685](https://issues.apache.org/jira/browse/CB-12685) added `package.json` to tests folder
+
+### 1.0.6 (Feb 28, 2017)
+* [CB-12029](https://issues.apache.org/jira/browse/CB-12029) **blackberry10**: Remove logging code that causes crashes on **BB10**
+* [CB-12369](https://issues.apache.org/jira/browse/CB-12369) Add plugin typings from `DefinitelyTyped`
+* [CB-12363](https://issues.apache.org/jira/browse/CB-12363) Added build badges for **iOS 9.3** and **iOS 10.0**
+* [CB-11154](https://issues.apache.org/jira/browse/CB-11154) **Windows:** Return `IANA` timezone as an empty string instead of `undefined`
+* [CB-11154](https://issues.apache.org/jira/browse/CB-11154) **Android**, **iOS** Add `IANA` timezone
+* [CB-12230](https://issues.apache.org/jira/browse/CB-12230) Removed **Windows 8.1** build badges
+
+### 1.0.5 (Dec 07, 2016)
+* [CB-12224](https://issues.apache.org/jira/browse/CB-12224) Updated version and RELEASENOTES.md for release 1.0.5
+* [CB-11917](https://issues.apache.org/jira/browse/CB-11917) - Remove pull request template checklist item: "iCLA has been submitted…"
+* [CB-11832](https://issues.apache.org/jira/browse/CB-11832) Incremented plugin version.
+
+### 1.0.4 (Sep 08, 2016)
+* [CB-11795](https://issues.apache.org/jira/browse/CB-11795) Add 'protective' entry to cordovaDependencies
+* Add badges for paramedic builds on Jenkins
+* Add pull request template.
+* [CB-10996](https://issues.apache.org/jira/browse/CB-10996) Adding front matter to README.md
+
 ### 1.0.3 (Mar 09, 2016)
-* CB-10792 -Cannot install cordova-plugin-globalization with cordova-windows on Ubuntu
-* CB-10636 Add JSHint for plugins
+* [CB-10792](https://issues.apache.org/jira/browse/CB-10792) -Cannot install cordova-plugin-globalization with cordova-windows on Ubuntu
+* [CB-10636](https://issues.apache.org/jira/browse/CB-10636) Add JSHint for plugins
 * Minor changes to readme
-* CB-10605 fix deprecation warnings on ** iOS **
+* [CB-10605](https://issues.apache.org/jira/browse/CB-10605) fix deprecation warnings on **iOS**
 * chore: edit package.json license to match SPDX id
 
 ### 1.0.2 (Nov 18, 2015)

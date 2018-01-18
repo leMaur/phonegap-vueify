@@ -21,13 +21,13 @@
 
 module.exports = {
 
-    vibrate: function(success, fail, milliseconds) {
+    vibrate: function (success, fail, milliseconds) {
         if (navigator.notification.vibrate) {
             navigator.vibrate(milliseconds);
         } else {
-            console.log ("cordova/plugin/firefoxos/vibration, vibrate API does not exist");
+            console.log('cordova/plugin/firefoxos/vibration, vibrate API does not exist');
         }
     }
 };
 
-require("cordova/exec/proxy").add("Vibration", module.exports);
+require('cordova/exec/proxy').add('Vibration', module.exports);

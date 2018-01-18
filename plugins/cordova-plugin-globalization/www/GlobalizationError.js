@@ -19,7 +19,6 @@
  *
 */
 
-
 /**
  * Globalization error object
  *
@@ -27,7 +26,7 @@
  * @param code
  * @param message
  */
-var GlobalizationError = function(code, message) {
+var GlobalizationError = function (code, message) {
     this.code = code || null;
     this.message = message || '';
 };

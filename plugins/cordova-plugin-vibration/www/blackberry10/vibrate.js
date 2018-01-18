@@ -19,7 +19,7 @@
  *
 */
 
-var vibrate = function(duration) {
+var vibrate = function (duration) {
     navigator.vibrate(duration);
 };
 

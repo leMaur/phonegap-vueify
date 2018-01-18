@@ -22,7 +22,7 @@
 xmlns:rim="http://www.blackberry.com/ns/widgets"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-geolocation"
-      version="2.1.0">
+      version="2.4.3">
 
     <name>Geolocation</name>
     <description>Cordova Geolocation Plugin</description>
@@ -31,12 +31,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-geolocation.git</repo>
     <issue>https://issues.apache.org/jira/browse/CB/component/12320638</issue>
 
+    <dependency id="cordova-plugin-compat" version="^1.0.0" />
+
     <!-- android -->
     <platform name="android">
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-feature android:name="android.hardware.location.gps" />
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/*">
@@ -46,7 +49,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         </config-file>
 
         <source-file src="src/android/Geolocation.java" target-dir="src/org/apache/cordova/geolocation/" />
-        <source-file src="src/android/PermissionHelper.java" target-dir="src/org/apache/cordova/geolocation/" />
 
         <js-module src="www/android/geolocation.js" name="geolocation">
             <clobbers target="navigator.geolocation" />
@@ -97,8 +99,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/CDVLocation.m" />
         <framework src="CoreLocation.framework" />
 
+        <preference name="GEOLOCATION_USAGE_DESCRIPTION" default=" " />
         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
-            <string></string>
+            <string>$GEOLOCATION_USAGE_DESCRIPTION</string>
         </config-file>
 
     </platform>

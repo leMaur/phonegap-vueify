@@ -21,6 +21,7 @@ package org.apache.cordova.networkinformation;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
@@ -33,7 +34,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import java.util.Locale;
 
@@ -47,14 +47,16 @@ public class NetworkManager extends CordovaPlugin {
     public static final String WIMAX = "wimax";
     // mobile
     public static final String MOBILE = "mobile";
-    
-    // Android L calls this Cellular, because I have no idea! 
+
+    // Android L calls this Cellular, because I have no idea!
     public static final String CELLULAR = "cellular";
     // 2G network types
+    public static final String TWO_G = "2g";
     public static final String GSM = "gsm";
     public static final String GPRS = "gprs";
     public static final String EDGE = "edge";
     // 3G network types
+    public static final String THREE_G = "3g";
     public static final String CDMA = "cdma";
     public static final String UMTS = "umts";
     public static final String HSPA = "hspa";
@@ -63,12 +65,14 @@ public class NetworkManager extends CordovaPlugin {
     public static final String ONEXRTT = "1xrtt";
     public static final String EHRPD = "ehrpd";
     // 4G network types
+    public static final String FOUR_G = "4g";
     public static final String LTE = "lte";
     public static final String UMB = "umb";
     public static final String HSPA_PLUS = "hspa+";
     // return type
     public static final String TYPE_UNKNOWN = "unknown";
     public static final String TYPE_ETHERNET = "ethernet";
+    public static final String TYPE_ETHERNET_SHORT = "eth";
     public static final String TYPE_WIFI = "wifi";
     public static final String TYPE_2G = "2g";
     public static final String TYPE_3G = "3g";
@@ -127,7 +131,9 @@ public class NetworkManager extends CordovaPlugin {
             String connectionType = "";
             try {
                 connectionType = this.getConnectionInfo(info).get("type").toString();
-            } catch (JSONException e) { }
+            } catch (JSONException e) {
+                LOG.d(LOG_TAG, e.getLocalizedMessage());
+            }
 
             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, connectionType);
             pluginResult.setKeepCallback(true);
@@ -145,7 +151,7 @@ public class NetworkManager extends CordovaPlugin {
             try {
                 webView.getContext().unregisterReceiver(this.receiver);
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Error unregistering network receiver: " + e.getMessage(), e);
+                LOG.e(LOG_TAG, "Error unregistering network receiver: " + e.getMessage(), e);
             } finally {
                 receiver = null;
             }
@@ -171,7 +177,9 @@ public class NetworkManager extends CordovaPlugin {
             String connectionType = "";
             try {
                 connectionType = thisInfo.get("type").toString();
-            } catch (JSONException e) { }
+            } catch (JSONException e) {
+                LOG.d(LOG_TAG, e.getLocalizedMessage());
+            }
 
             sendUpdate(connectionType);
             lastInfo = thisInfo;
@@ -198,15 +206,17 @@ public class NetworkManager extends CordovaPlugin {
             extraInfo = info.getExtraInfo();
         }
 
-        Log.d("CordovaNetworkManager", "Connection Type: " + type);
-        Log.d("CordovaNetworkManager", "Connection Extra Info: " + extraInfo);
+        LOG.d(LOG_TAG, "Connection Type: " + type);
+        LOG.d(LOG_TAG, "Connection Extra Info: " + extraInfo);
 
         JSONObject connectionInfo = new JSONObject();
 
         try {
             connectionInfo.put("type", type);
             connectionInfo.put("extraInfo", extraInfo);
-        } catch (JSONException e) { }
+        } catch (JSONException e) {
+            LOG.d(LOG_TAG, e.getLocalizedMessage());
+        }
 
         return connectionInfo;
     }
@@ -235,19 +245,20 @@ public class NetworkManager extends CordovaPlugin {
         if (info != null) {
             String type = info.getTypeName().toLowerCase(Locale.US);
 
-            Log.d("CordovaNetworkManager", "toLower : " + type.toLowerCase());
-            Log.d("CordovaNetworkManager", "wifi : " + WIFI);
+            LOG.d(LOG_TAG, "toLower : " + type.toLowerCase());
+            LOG.d(LOG_TAG, "wifi : " + WIFI);
             if (type.equals(WIFI)) {
                 return TYPE_WIFI;
             }
-            else if (type.toLowerCase().equals(TYPE_ETHERNET)) { 
+            else if (type.toLowerCase().equals(TYPE_ETHERNET) || type.toLowerCase().startsWith(TYPE_ETHERNET_SHORT)) {
                 return TYPE_ETHERNET;
             }
             else if (type.equals(MOBILE) || type.equals(CELLULAR)) {
                 type = info.getSubtypeName().toLowerCase(Locale.US);
                 if (type.equals(GSM) ||
                         type.equals(GPRS) ||
-                        type.equals(EDGE)) {
+                        type.equals(EDGE) ||
+                        type.equals(TWO_G)) {
                     return TYPE_2G;
                 }
                 else if (type.startsWith(CDMA) ||
@@ -256,12 +267,14 @@ public class NetworkManager extends CordovaPlugin {
                         type.equals(EHRPD) ||
                         type.equals(HSUPA) ||
                         type.equals(HSDPA) ||
-                        type.equals(HSPA)) {
+                        type.equals(HSPA) ||
+                        type.equals(THREE_G)) {
                     return TYPE_3G;
                 }
                 else if (type.equals(LTE) ||
                         type.equals(UMB) ||
-                        type.equals(HSPA_PLUS)) {
+                        type.equals(HSPA_PLUS) ||
+                        type.equals(FOUR_G)) {
                     return TYPE_4G;
                 }
             }

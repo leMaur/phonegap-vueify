@@ -20,6 +20,7 @@ package org.apache.cordova.batterystatus;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 
 public class BatteryListener extends CordovaPlugin {
 
@@ -116,7 +116,7 @@ public class BatteryListener extends CordovaPlugin {
                 webView.getContext().unregisterReceiver(this.receiver);
                 this.receiver = null;
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Error unregistering battery receiver: " + e.getMessage(), e);
+                LOG.e(LOG_TAG, "Error unregistering battery receiver: " + e.getMessage(), e);
             }
         }
     }
@@ -133,7 +133,7 @@ public class BatteryListener extends CordovaPlugin {
             obj.put("level", batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, 0));
             obj.put("isPlugged", batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_PLUGGED, -1) > 0 ? true : false);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
+            LOG.e(LOG_TAG, e.getMessage(), e);
         }
         return obj;
     }

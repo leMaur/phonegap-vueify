@@ -20,7 +20,7 @@
 */
 
 module.exports = {
-    vibrate: function(success, fail, milliseconds) {
+    vibrate: function (success, fail, milliseconds) {
         console.log('Vibration is not supported');
         return false;
     }

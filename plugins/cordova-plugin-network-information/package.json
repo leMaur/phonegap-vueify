@@ -1,7 +1,34 @@
 {
-  "name": "cordova-plugin-network-information",
-  "version": "1.2.1",
-  "description": "Cordova Network Information Plugin",
+  "_from": "cordova-plugin-network-information@~1.3.3",
+  "_id": "cordova-plugin-network-information@1.3.4",
+  "_inBundle": false,
+  "_integrity": "sha1-KPQmzCZZF03GIqBxgPm6DYVfc4M=",
+  "_location": "/cordova-plugin-network-information",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-network-information@~1.3.3",
+    "name": "cordova-plugin-network-information",
+    "escapedName": "cordova-plugin-network-information",
+    "rawSpec": "~1.3.3",
+    "saveSpec": null,
+    "fetchSpec": "~1.3.3"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-network-information/-/cordova-plugin-network-information-1.3.4.tgz",
+  "_shasum": "28f426cc2659174dc622a07180f9ba0d855f7383",
+  "_spec": "cordova-plugin-network-information@~1.3.3",
+  "_where": "/Users/janthoma/Desktop/bwfy",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-network-information",
     "platforms": [
@@ -19,10 +46,25 @@
       "browser"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-network-information"
+  "deprecated": false,
+  "description": "Cordova Network Information Plugin",
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-network-information#readme",
   "keywords": [
     "cordova",
     "network",
@@ -41,13 +83,16 @@
     "cordova-tizen",
     "cordova-browser"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "jshint www && jshint src && jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "name": "cordova-plugin-network-information",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-network-information.git"
+  },
+  "scripts": {
+    "eslint": "eslint www && eslint src && eslint tests",
+    "test": "npm run eslint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.3.4"
 }

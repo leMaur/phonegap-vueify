@@ -20,24 +20,26 @@
  */
 var browser = require('cordova/platform');
 
-function getPlatform() {
-    return "browser";
+function getPlatform () {
+    return 'browser';
 }
 
-function getModel() {
+function getModel () {
     return getBrowserInfo(true);
 }
 
-function getVersion() {
+function getVersion () {
     return getBrowserInfo(false);
 }
 
-function getBrowserInfo(getModel) {
+function getBrowserInfo (getModel) {
     var userAgent = navigator.userAgent;
     var returnVal = '';
     var offset;
 
-    if ((offset = userAgent.indexOf('Chrome')) !== -1) {
+    if ((offset = userAgent.indexOf('Edge')) !== -1) {
+        returnVal = (getModel) ? 'Edge' : userAgent.substring(offset + 5);
+    } else if ((offset = userAgent.indexOf('Chrome')) !== -1) {
         returnVal = (getModel) ? 'Chrome' : userAgent.substring(offset + 7);
     } else if ((offset = userAgent.indexOf('Safari')) !== -1) {
         if (getModel) {
@@ -64,7 +66,6 @@ function getBrowserInfo(getModel) {
     return returnVal;
 }
 
-
 module.exports = {
     getDeviceInfo: function (success, error) {
         setTimeout(function () {
@@ -73,10 +74,11 @@ module.exports = {
                 platform: getPlatform(),
                 model: getModel(),
                 version: getVersion(),
-                uuid: null
+                uuid: null,
+                isVirtual: false
             });
         }, 0);
     }
 };
 
-require("cordova/exec/proxy").add("Device", module.exports);
+require('cordova/exec/proxy').add('Device', module.exports);
