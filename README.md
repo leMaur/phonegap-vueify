@@ -2,6 +2,8 @@ PhoneGap Vueify
 ===============
 PhoneGap with Vue, Browserify + vueify, hot reload, linting and unit testing.
 
+This repo will be archived soon! If someone is interested to maintain it, can DM me on twitter [@MaurizioLepora](https://twitter.com/MaurizioLepora).
+
 Getting Started
 ---------------
 
